@@ -1,0 +1,65 @@
+<html>
+<head>
+<title>Chatting room</title>
+<style>
+.main {
+	height:500px;
+	width:500px;
+	padding:10px;
+	display:inline-block;
+	border:1px solid black;
+}
+</style>
+</head>
+<body onload=ini()>
+<script>
+var wc,id=Math.ceil(Math.random()*10000);
+function addElement(target,type,className,id) {
+	var element=(type instanceof HTMLElement? type:document.createElement(type));
+	if (typeof(className)=="string") {element.className=(element.className==""? "":element.className+" ")+className;};
+	if (id!=undefined) {element.id=id};
+	if (target instanceof HTMLElement) {target.appendChild(element)};
+	return element;
+}
+function display(text) {addElement(document.getElementById("main"),"div").innerHTML=text;}
+function send(type,text) {
+	if (wc.readyState!==1) {display("Connection Lost. Please refresh page to retry.");return;}
+	let input=document.getElementById("input");
+	let msg={
+		type:type||"message",
+		text:text||input.value,
+		id:id
+	}
+	wc.send(JSON.stringify(msg));
+	input.value="";
+}
+function ini() {
+	display("Connecting to chat server...");
+	
+	wc=new WebSocket("ws://127.0.0.1:8080");
+	wc.onerror=(e)=>{display("Error: Connection Lost. Please refresh page to retry.");}
+	wc.onmessage=(e)=>{
+		let msg=JSON.parse(e.data);
+		switch (msg.type) {
+			case "message":
+			display((msg.id===id? "you":"anonymous")+" - "+msg.text);
+			break;
+			
+			case "joining":
+			if (msg.id===id) {display("You have joined the chat.");} else {display("A new user has joined the chat");}
+			break;
+			
+			case "disconnect":
+			display("A user has left the chat");
+			break;
+		}
+	}
+	wc.onopen=(e)=>{display("Connected.");send("joining","");}
+}
+</script>
+<div class=main id=main></div>
+<div>
+<input type=text id=input></input><button type=button onclick=send()>Send</button>
+</div>
+</body>
+</html>
