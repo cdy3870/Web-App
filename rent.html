@@ -1,177 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <!-- Theme Made By www.w3schools.com - No Copyright -->
-  <title>Bootstrap Theme The Band</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <style type="text/css">
-    .box {
-      display: inline-block;
-      width: 48%;
-      height: 50%;
-    }
-  </style>
+  <head>
+    <!-- Theme Made By www.w3schools.com - No Copyright -->
+    <title>Rent</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
-</head>
-<body>
-  <nav class="navbar navbar-default">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>                        
-        </button>
-        <a class="navbar-brand" href="#myPage">Logo</a>
+    <link rel="stylesheet" href="StyleSheet.css">
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="float-left">
+        <a class="active" href="#rent">RENT</a>
+        <a href="#upload">UPLOAD</a>
       </div>
-      <div class="collapse navbar-collapse" id="myNavbar">
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="#myPage">RENT</a></li>
-          <li><a href="#band">UPLOAD</a></li>
-          <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">MORE
-            <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="#">Merchandise</a></li>
-              <li><a href="#">Extras</a></li>
-              <li><a href="#">Media</a></li> 
-            </ul>
-          </li>
-          <li><a href="#"><span class="glyphicon glyphicon-search"></span></a></li>
-        </ul>
+      <div class="float-right">
+        <a href="#user">UserName</a>
+        <a href="#logout">Log Out</a>
       </div>
-    </div>
-  </nav>
+    </nav>
 
-    <div class="row">
+    <table>
+      <tr>
+        <td class="w50">
+
+          <div class="container w100">
+            <h3>Item List</h3>
+            <table class="table table-dark">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Item</th>
+                  <th scope="col">Monthly Renting Price</th>
+                  <th scope="col">Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>Car</td>
+                  <td>$100</td>
+                  <td><button>View</button></td>
+                </tr>
+                <tr>
+                  <th scope="row">2</th>
+                  <td>Guitar</td>
+                  <td>$10</td>
+                  <td><button>View</button></td>
+                </tr>
+                <tr>
+                  <th scope="row">3</th>
+                  <td>Grand Piano</td>
+                  <td>$200</td>
+                  <td><button>View</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
       
-      <div class="col-md-6">
-        <h3>Item List</h3>
-        <table class="table table-dark">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Item</th>
-              <th scope="col">Monthly Renting Price</th>
-              <th scope="col">Details</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Car</td>
-              <td>$100</td>
-              <td><button>View</button></td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Guitar</td>
-              <td>$10</td>
-              <td><button>View</button></td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Grand Piano</td>
-              <td>$200</td>
-              <td><button>View</button></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+        </td>
+        <td class="w50">
 
-    
-    <div class="col-md-6">
-      <h3>Shopping Cart</h3>
-      <table class="table table-dark">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Item</th>
-            <th scope="col">Monthly Renting Price</th>
-            <th scope="col">Remove from Cart</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Car</td>
-            <td>$100</td>
-            <td><button>Remove</button></td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Guitar</td>
-            <td>$10</td>
-            <td><button>Remove</button></td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>Grand Piano</td>
-            <td>$200</td>
-            <td><button>Remove</button></td>
-          </tr>
-        </tbody>
-      </table>
-      <button>Checkout</button>
-    </div>
+          <div class="container w100">
+            <h3>Shopping Cart</h3>
+            <table class="table table-dark">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Item</th>
+                  <th scope="col">Monthly Renting Price</th>
+                  <th scope="col">Remove from Cart</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>Car</td>
+                  <td>$100</td>
+                  <td><button>Remove</button></td>
+                </tr>
+                <tr>
+                  <th scope="row">2</th>
+                  <td>Guitar</td>
+                  <td>$10</td>
+                  <td><button>Remove</button></td>
+                </tr>
+                <tr>
+                  <th scope="row">3</th>
+                  <td>Grand Piano</td>
+                  <td>$200</td>
+                  <td><button>Remove</button></td>
+                </tr>
+              </tbody>
+            </table>
+            <button>Checkout</button>
+          </div>
+      
+        </td>
+      </tr>
+      <tr>
+        <td class="w50">
+                
+          <div class="container w100">
+            <h3>Details</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac odio non arcu tempus maximus. Sed consectetur lobortis sollicitudin. Aenean feugiat feugiat felis sed volutpat. Phasellus vehicula lacinia nisi. Aenean vitae erat interdum, interdum urna bibendum, mattis velit. Donec placerat rhoncus interdum. Nunc tristique non sapien ac dapibus. Suspendisse vestibulum gravida purus id tincidunt. Vivamus nec urna dolor. Praesent commodo tortor euismod hendrerit pharetra. Sed velit turpis, tristique sit amet consequat vitae, tincidunt sed purus. Proin varius auctor ornare. Phasellus luctus massa ac arcu elementum, eu vulputate ante varius. In molestie rhoncus magna, ullamcorper luctus nisi laoreet eu. Duis ante sapien, suscipit et pretium et, imperdiet nec enim. Phasellus volutpat lectus malesuada laoreet sagittis.</p>
+            <p>Retail Price: $50000</p>
+            <button>Add to Cart</button>
+          </div>
 
-  </div>
+        </td>
+        <td class="w50">
+          
+          <div class="container w100">
+            <h3>Rented Items</h3>
+            <table class="table table-dark">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Item</th>
+                  <th scope="col">Next Billing Date</th>
+                  <th scope="col">Return Item</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>Car</td>
+                  <td>April 20, 2020</td>
+                  <td><button>Return</button></td>
+                </tr>
+                <tr>
+                  <th scope="row">2</th>
+                  <td>Guitar</td>
+                  <td>December 25, 2020</td>
+                  <td><button>Return</button></td>
+                </tr>
+                <tr>
+                  <th scope="row">3</th>
+                  <td>Grand Piano</td>
+                  <td>October 31, 2020</td>
+                  <td><button>Return</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-
-    <div class="row">
-
-      <div class="col-md-6">
-        <h3>Details</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac odio non arcu tempus maximus. Sed consectetur lobortis sollicitudin. Aenean feugiat feugiat felis sed volutpat. Phasellus vehicula lacinia nisi. Aenean vitae erat interdum, interdum urna bibendum, mattis velit. Donec placerat rhoncus interdum. Nunc tristique non sapien ac dapibus. Suspendisse vestibulum gravida purus id tincidunt. Vivamus nec urna dolor. Praesent commodo tortor euismod hendrerit pharetra. Sed velit turpis, tristique sit amet consequat vitae, tincidunt sed purus. Proin varius auctor ornare. Phasellus luctus massa ac arcu elementum, eu vulputate ante varius. In molestie rhoncus magna, ullamcorper luctus nisi laoreet eu. Duis ante sapien, suscipit et pretium et, imperdiet nec enim. Phasellus volutpat lectus malesuada laoreet sagittis.</p>
-        <p>Retail Price: $50000</p>
-        <button>Add to Cart</button>
-      </div>
-
-    <div class="col-md-6">
-      <h3>Rented Items</h3>
-      <table class="table table-dark">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Item</th>
-            <th scope="col">Next Billing Date</th>
-            <th scope="col">Return Item</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Car</td>
-            <td>April 20, 2020</td>
-            <td><button>Return</button></td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Guitar</td>
-            <td>December 25, 2020</td>
-            <td><button>Return</button></td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>Grand Piano</td>
-            <td>October 31, 2020</td>
-            <td><button>Return</button></td>
-          </tr>
-        </tbody>
-      </table>
-
-    </div>
-
-  </div>
-  
+        </td>
+      </tr>
+    </table>
 
 
-</body>
+
+  </body>
 </head>
 
