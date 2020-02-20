@@ -3,8 +3,8 @@ import os
 
 app = Flask(__name__)
 
-@app.route('/welcome')
-def welcome():
+@app.route('/')
+def rent():
 	return render_template('rent.html')
 
 if __name__ == '__main__':
