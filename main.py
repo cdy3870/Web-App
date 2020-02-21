@@ -7,7 +7,7 @@ from google.cloud import datastore
 app = Flask(__name__)
 app.secret_key = 'secret'
 
-datastore_client = datastore.Client()
+"""datastore_client = datastore.Client()
 
 def store_time(dt):
     entity = datastore.Entity(key=datastore_client.key('visit'))
@@ -24,7 +24,7 @@ def fetch_times(limit):
 
     times = query.fetch(limit=limit)
 
-    return times
+    return times"""
 
 #wrap used to prevent unwanted accesses
 def login_required(f):
@@ -38,7 +38,10 @@ def login_required(f):
 	return wrap
 
 @app.route('/')
-@login_required
+def homepage():
+	return render_template('homepage.html')
+
+@app.route('/rent')
 def rent():
 	return render_template('rent.html')
 
@@ -75,7 +78,7 @@ def login():
 def logout():
 	session.pop('logged_in', None)
 	flash('you were just logged out')
-	return redirect(url_for('login'))
+	return redirect(url_for('homepage'))
 
 if __name__ == '__main__':
 	app.run(debug=True)
