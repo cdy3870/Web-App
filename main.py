@@ -2,9 +2,29 @@ from flask import Flask, render_template, url_for, redirect, request, session, f
 import os
 from functools import wraps
 from passlib.hash import sha256_crypt
+from google.cloud import datastore
 
 app = Flask(__name__)
 app.secret_key = 'secret'
+
+datastore_client = datastore.Client()
+
+def store_time(dt):
+    entity = datastore.Entity(key=datastore_client.key('visit'))
+    entity.update({
+        'timestamp': dt
+    })
+
+    datastore_client.put(entity)
+
+
+def fetch_times(limit):
+    query = datastore_client.query(kind='visit')
+    query.order = ['-timestamp']
+
+    times = query.fetch(limit=limit)
+
+    return times
 
 #wrap used to prevent unwanted accesses
 def login_required(f):
@@ -30,11 +50,12 @@ def upload():
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
 	error = None
+	username = None
 	if request.method == 'POST':
 
 		pass_hash = sha256_crypt.encrypt(request.form['password'])
 
-		print(sha256_crypt.verify("admin", pass_hash))
+		#print(sha256_crypt.verify("admin", pass_hash))
 
 		#SQL query database to get the row with the username
 		#verify the hashed password with a hashed version of the input
@@ -42,9 +63,9 @@ def login():
 			error = 'invalid credentials'
 		else:
 			#store session value as true to indicate login
-			print("test")
 			session['logged_in'] = True
 			flash('you were just logged in')
+			print(request.form['username'])
 			return redirect(url_for('rent'))
 			
 	return render_template('login.html', error=error)
