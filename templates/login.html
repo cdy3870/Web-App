@@ -10,16 +10,26 @@
     <link rel="stylesheet" href="static\css\StyleSheet.css">
   </head>
   <body>
-    <nav class="navbar">
+    <!--<nav class="navbar">
       <div class="float-left">
         <a href="/">RENT</a>
-        <a class="active" href="/upload">UPLOAD</a>
+        <a href="/upload">UPLOAD</a>
       </div>
       <div class="float-right">
         <a href="#user">UserName</a>
         <a href="#logout">Log Out</a>
       </div>
-    </nav>
+    </nav>-->
+
+       <h1>Please login</h1>
+      <br>
+      <form action="" method="post">
+        <input type="text" placeholder="Username" name="username" value="{{
+          request.form.username }}">
+         <input type="password" placeholder="Password" name="password" value="{{
+          request.form.password }}">
+        <input class="btn btn-default" type="submit" value="Login">
+      </form>
 
 </body>
 </html>
