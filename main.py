@@ -41,14 +41,21 @@ def login_required(f):
 def homepage():
 	return render_template('homepage.html')
 
+@app.route('/signup')
+def signup():
+	return render_template('CreateProfile.html')
+
 @app.route('/rent')
 def rent():
-	return render_template('rent.html')
+	if "logged_in" in session:
+		return render_template('rent.html', username=session['username'], logout=True)
+	
+	return render_template('rent.html', username="Not signed in", logout=False)
 
 @app.route('/upload')
 @login_required
 def upload():
-	return render_template('upload.html')
+	return render_template('upload.html', username=session['username'])
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
@@ -68,8 +75,8 @@ def login():
 			#store session value as true to indicate login
 			session['logged_in'] = True
 			flash('you were just logged in')
-			print(request.form['username'])
-			return redirect(url_for('rent'))
+			session['username'] = request.form['username']
+			return redirect(url_for('rent', username=session['username']))
 			
 	return render_template('login.html', error=error)
 

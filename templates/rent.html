@@ -12,12 +12,19 @@
   <body>
     <nav class="navbar">
       <div class="float-left">
-        <a class="active" href="/">RENT</a>
+        <a class="active" href="/rent">RENT</a>
         <a href="/upload">UPLOAD</a>
       </div>
       <div class="float-right">
-        <a href="#user">Username</a>
+        <a href="#user">{{username}}</a>
+        {%- if logout -%}
         <a href="/logout">Log Out</a>
+        {%- endif %}
+        {%- if not logout -%}
+        <a href="/login">Log In</a>
+        <a href="/signup">Sign Up</a>
+        {%- endif %}
+        
       </div>
     </nav>
 
