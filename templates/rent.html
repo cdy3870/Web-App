@@ -10,10 +10,10 @@
     <link rel="stylesheet" href="static\css\StyleSheet.css">
   </head>
   <body>
-    <nav class="navbar">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
       <div class="float-left">
-        <a class="active" href="/rent">RENT</a>
-        <a href="/upload">UPLOAD</a>
+        <a class="active" href="/rent">Rent</a>
+        <a href="/upload">Upload</a>
       </div>
       <div class="float-right">
         <a href="#user">{{username}}</a>
@@ -23,10 +23,28 @@
         {%- if not logout -%}
         <a href="/login">Log In</a>
         <a href="/signup">Sign Up</a>
+        <a href="/
+        ">Home</a>
         {%- endif %}
         
       </div>
     </nav>
+
+    <!--<div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content"> 
+                <div class="modal-header">
+                    <h5 class="modal-title">Login</h5> 
+                </div>
+                <div class="modal-body">
+              
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss = "modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>-->
 
     <table>
       <tr>
