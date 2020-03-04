@@ -2,9 +2,13 @@ from flask import Flask, render_template, url_for, redirect, request, session, f
 import os
 from functools import wraps
 from passlib.hash import sha256_crypt
+from items.item_blueprint import item_blueprint
 
 app = Flask(__name__)
+app.register_blueprint(item_blueprint)
 app.secret_key = 'secret'
+
+
 
 #wrap used to prevent unwanted accesses
 def login_required(f):
@@ -25,12 +29,12 @@ def homepage():
 def signup():
 	return render_template('CreateProfile.html')
 
-@app.route('/rent')
+"""@app.route('/rent')
 def rent():
 	if "logged_in" in session:
 		return render_template('rent.html', username=session['username'], logout=True)
 	
-	return render_template('rent.html', username="Not signed in", logout=False)
+	return render_template('rent.html', username="Not signed in", logout=False)"""
 
 @app.route('/upload')
 @login_required
