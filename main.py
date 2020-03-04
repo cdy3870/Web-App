@@ -2,7 +2,6 @@ from flask import Flask, render_template, url_for, redirect, request, session, f
 import os
 from functools import wraps
 from passlib.hash import sha256_crypt
-from google.cloud import datastore
 
 app = Flask(__name__)
 app.secret_key = 'secret'
