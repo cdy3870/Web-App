@@ -6,25 +6,6 @@ from passlib.hash import sha256_crypt
 app = Flask(__name__)
 app.secret_key = 'secret'
 
-"""datastore_client = datastore.Client()
-
-def store_time(dt):
-    entity = datastore.Entity(key=datastore_client.key('visit'))
-    entity.update({
-        'timestamp': dt
-    })
-
-    datastore_client.put(entity)
-
-
-def fetch_times(limit):
-    query = datastore_client.query(kind='visit')
-    query.order = ['-timestamp']
-
-    times = query.fetch(limit=limit)
-
-    return times"""
-
 #wrap used to prevent unwanted accesses
 def login_required(f):
 	@wraps(f)

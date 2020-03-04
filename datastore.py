@@ -1,18 +1,32 @@
 from google.cloud import datastore
+from item import Item
 
- datastore_client = datastore.Client()
+IT_ENTITY_TYPE = 'Item'
 
- kind = 'WhateverYouLike'
+def log(msg):
+    print('itemdata: %s' % msg)
 
- # Come up with some ID; alternatively datastore can generate one for you. Note: generated IDs are numeric.
- name = 'sampletask1'
+def get_client():
+    return datastore.Client()
 
- # Create some a datastore key for your entity
- task_key = datastore_client.key(kind, name)
+def load_key(client, item_id=None):
+    if item_id:
+        key = client.key(IT_ENTITY_TYPE, int(item_id))
+    else:
+        key = client.key(IT_ENTITY_TYPE)
+    
+    return key
 
- # You can give it some parameters
- task = datastore.Entity(key=task_key)
- task['description'] = 'Buy milk'
+def convert_to_object(entity):
+    item_id = entity.key.id_or_name
+    return Item(item_id, entity['title'], entity['weekly_price'])
 
- # Save the entity
- datastore_client.put(task)
+def create_list_item(item):
+    client = get_client
+    key = load_key(client)
+    item.id = key.id_or_name
+    entity = datastore.Entity(key)
+    entity['weekly_price'] = item.weekly_price
+    entity['title'] = item.title
+    client.put(entity)
+    log('saved new entity for ID: %s' % key.id_or_name)
