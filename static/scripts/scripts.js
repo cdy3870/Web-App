@@ -13,6 +13,7 @@ function saveItem(id) {
 }
 
 function loadItems() {
+    console.log("loading items")
     getData('/load-items', displayList);
 }
 
