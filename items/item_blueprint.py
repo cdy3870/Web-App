@@ -43,26 +43,27 @@ def upload():
 		        #manage.save_list_item(item)
 		    else:
 		        items.manage.log('saving new list item')
-		        #manage.create_list_item(ShoppingListItem(None, title, q))
+		        items.manage.create_list_item(Item(None, item_title, weekly_price))
 		    json_result['ok'] = True
 		except Exception as exc:
 		    items.manage.log(str(exc))
 		    json_result['error'] = 'The item was not saved.'
 	return render_template('upload.html', username=session['username'])
 
-"""def load_sli_items():
+@item_bp.route('/load-items')
+def load_items():
     # first we load the list items
 
-    log('loading list items.')
-    sli_list = slidata.get_list_items()
+    items.manage.log('loading list items.')
+    item_list = items.manage.get_list_items()
     json_list = []
 
     # then we convert it into a normal list of dicts so that we can easily turn
     # it into JSON
-    for sl_item in sli_list:
-        d = sl_item.to_dict()
-        d['id'] = str(sl_item.id)
+    for item in item_list:
+        d = item.to_dict()
+        d['id'] = str(item.id)
         json_list.append(d)
 
     responseJson = json.dumps(json_list)
-    return flask.Response(responseJson, mimetype='application/json')"""
+    return flask.Response(responseJson, mimetype='application/json')
