@@ -2,10 +2,10 @@ from flask import Flask, render_template, url_for, redirect, request, session, f
 import os
 from functools import wraps
 from passlib.hash import sha256_crypt
-from items.item_blueprint import item_blueprint
+from items.item_blueprint import item_bp
 
 app = Flask(__name__)
-app.register_blueprint(item_blueprint)
+app.register_blueprint(item_bp)
 app.secret_key = 'secret'
 
 
@@ -29,18 +29,6 @@ def homepage():
 def signup():
 	return render_template('CreateProfile.html')
 
-"""@app.route('/rent')
-def rent():
-	if "logged_in" in session:
-		return render_template('rent.html', username=session['username'], logout=True)
-	
-	return render_template('rent.html', username="Not signed in", logout=False)"""
-
-@app.route('/upload')
-@login_required
-def upload():
-	return render_template('upload.html', username=session['username'])
-
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
 	error = None
@@ -60,7 +48,7 @@ def login():
 			session['logged_in'] = True
 			flash('you were just logged in')
 			session['username'] = request.form['username']
-			return redirect(url_for('rent', username=session['username']))
+			return redirect(url_for('item_blueprint.rent', username=session['username']))
 			
 	return render_template('login.html', error=error)
 
