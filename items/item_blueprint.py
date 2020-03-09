@@ -67,3 +67,29 @@ def load_items():
 
     responseJson = json.dumps(json_list)
     return flask.Response(responseJson, mimetype='application/json')
+
+"""@app.route('/save-item', methods=['POST'])
+def save_item():
+    # retrieve the parameters from the request
+    title = request.form['title']
+    weekly_price = request.form['weekly_price']
+
+    item_id = None
+    if 'id' in flask.request.form:
+        item_id = flask.request.form['id']
+    json_result = {}
+
+    try:
+        if item_id:
+            item = ShoppingListItem(item_id, title, q)
+            log('saving list item for ID: %s' % item_id)
+            slidata.save_list_item(item)
+        else:
+            log('saving new list item')
+            slidata.create_list_item(ShoppingListItem(None, title, q))
+        json_result['ok'] = True
+    except Exception as exc:
+        log(str(exc))
+        json_result['error'] = 'The item was not saved.'
+
+    return flask.Response(json.dumps(json_result), mimetype='application/json')"""

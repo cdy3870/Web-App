@@ -1,3 +1,21 @@
+function saveItem(id) {
+    let params = {};
+    if (id) {
+        params['id'] = id;
+        params['quantity'] = document.getElementById("edit_item_quantity").value;
+        params['title'] = document.getElementById("edit_item_title").value;
+    } else {
+        // if no ID is supplied this is creating a new item.
+        params['quantity'] = document.getElementById("weekly_price").value;
+        params['title'] = document.getElementById("title").value;
+    }
+    sendJsonRequest(params, '/upload', itemSaved);
+}
+
+function loadItems() {
+    getData('/load-items', displayList);
+}
+
 function getData(targetUrl, callbackFunction) {
     let xmlHttp = createXmlHttp();
     xmlHttp.onreadystatechange = function() {
@@ -15,6 +33,3 @@ function getData(targetUrl, callbackFunction) {
     xmlHttp.send();
 }
 
-function loadItems() {
-    getData('/load-sl-items', displayList);
-}
