@@ -25,7 +25,7 @@ def rent():
 @item_bp.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload():
-	if request.method == 'POST':
+	"""if request.method == 'POST':
 		item_title = None
 		weekly_price = None
 		if 'title' in request.form:
@@ -47,7 +47,7 @@ def upload():
 		    json_result['ok'] = True
 		except Exception as exc:
 		    items.manage.log(str(exc))
-		    json_result['error'] = 'The item was not saved.'
+		    json_result['error'] = 'The item was not saved.'"""
 	return render_template('upload.html', username=session['username'])
 
 @item_bp.route('/load-items')

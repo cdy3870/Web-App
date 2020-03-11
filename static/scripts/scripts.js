@@ -1,4 +1,5 @@
 function saveItem(id) {
+
     let params = {};
     if (id) {
         params['id'] = id;
@@ -32,5 +33,18 @@ function getData(targetUrl, callbackFunction) {
     }
     xmlHttp.open("GET", targetUrl, true);
     xmlHttp.send();
+}
+
+function createXmlHttp() {
+    var xmlhttp;
+    if (window.XMLHttpRequest) {
+        xmlhttp = new XMLHttpRequest();
+    } else {
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    if (!(xmlhttp)) {
+        alert("Your browser does not support AJAX!");
+    }
+    return xmlhttp;
 }
 
