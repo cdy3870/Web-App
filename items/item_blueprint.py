@@ -2,6 +2,7 @@ from flask import flash, redirect, session, url_for, render_template, Blueprint,
 from functools import wraps
 from items.item import Item
 import items.manage 
+import uuid
 
 item_bp = Blueprint('item_blueprint', __name__, template_folder='templates')
 
