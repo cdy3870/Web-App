@@ -10,10 +10,11 @@ def get_client():
     return datastore.Client()
 
 def load_key(client, item_id=None):
-    print(client)
+    
     if item_id:
         key = client.key(IT_ENTITY_TYPE, int(item_id))
     else:
+        print("test")
         key = client.key(IT_ENTITY_TYPE)
     
     return key
@@ -21,6 +22,13 @@ def load_key(client, item_id=None):
 def convert_to_object(entity):
     item_id = entity.key.id_or_name
     return Item(item_id, entity['title'], entity['weekly_price'])
+
+def load_entity(client, item_id):
+    """Load a datstore entity using a particular client, and the ID."""
+    key = load_key(client, item_id)
+    entity = client.get(key)
+    log('retrieved entity for ' + item_id)
+    return entity
 
 def create_list_item(item):
     client = get_client()
@@ -30,6 +38,7 @@ def create_list_item(item):
     entity['weekly_price'] = item.weekly_price
     entity['title'] = item.title
     client.put(entity)
+    print(client.get(load_key(client, item.id)))
     log('saved new entity for ID: %s' % key.id_or_name)
 
 """def save_list_item(shopping_list_item):
