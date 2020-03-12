@@ -1,3 +1,19 @@
+function clearItemForm() {
+    document.getElementById("weekly_price").value = '';
+    document.getElementById("title").value = '';
+}
+
+function itemSaved(result, targetUrl, params) {
+    if (result && result.ok) {
+        console.log("Saved item.");
+        clearItemForm();
+        loadItems();
+    } else {
+        console.log("Received error: " + result.error);
+        showError(result.error);
+    }
+}
+
 function displayList(result, targetUrl) {
     if (result && result.length) {
         let text = '<ul>';
