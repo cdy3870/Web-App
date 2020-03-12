@@ -25,29 +25,6 @@ def rent():
 @item_bp.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload():
-	if request.method == 'POST':
-		item_title = None
-		weekly_price = None
-		if 'title' in request.form:
-		    item_title = request.form['title']
-		if 'weekly_price' in request.form:
-		    weekly_price = request.form['weekly_price']
-		json_result = {}
-
-		item_id = 0
-
-		try:
-		    if item_id:
-		        item = Item(item_id, title, weekly_price)
-		        items.manage.log('saving list item for ID: %s' % item_id)
-		        #manage.save_list_item(item)
-		    else:
-		        items.manage.log('saving new list item')
-		        items.manage.create_list_item(Item(None, item_title, weekly_price))
-		    json_result['ok'] = True
-		except Exception as exc:
-		    items.manage.log(str(exc))
-		    json_result['error'] = 'The item was not saved.'
 	return render_template('upload.html', username=session['username'])
 
 @item_bp.route('/load-items')
@@ -68,28 +45,30 @@ def load_items():
     responseJson = json.dumps(json_list)
     return flask.Response(responseJson, mimetype='application/json')
 
-"""@app.route('/save-item', methods=['POST'])
+@item_bp.route('/save-item', methods=['POST'])
 def save_item():
-    # retrieve the parameters from the request
-    title = request.form['title']
-    weekly_price = request.form['weekly_price']
 
-    item_id = None
-    if 'id' in flask.request.form:
-        item_id = flask.request.form['id']
-    json_result = {}
+	item_title = None
+	weekly_price = None
+	if 'title' in request.form:
+	    item_title = request.form['title']
+	if 'weekly_price' in request.form:
+	    weekly_price = request.form['weekly_price']
+	json_result = {}
 
-    try:
-        if item_id:
-            item = ShoppingListItem(item_id, title, q)
-            log('saving list item for ID: %s' % item_id)
-            slidata.save_list_item(item)
-        else:
-            log('saving new list item')
-            slidata.create_list_item(ShoppingListItem(None, title, q))
-        json_result['ok'] = True
-    except Exception as exc:
-        log(str(exc))
-        json_result['error'] = 'The item was not saved.'
+	item_id = 0
 
-    return flask.Response(json.dumps(json_result), mimetype='application/json')"""
+	try:
+	    if item_id:
+	        item = Item(item_id, title, weekly_price)
+	        items.manage.log('saving list item for ID: %s' % item_id)
+	        #manage.save_list_item(item)
+	    else:
+	        items.manage.log('saving new list item')
+	        items.manage.create_list_item(Item(None, item_title, weekly_price))
+	    json_result['ok'] = True
+	except Exception as exc:
+	    items.manage.log(str(exc))
+	    json_result['error'] = 'The item was not saved.'
+
+	return flask.Response(json.dumps(json_result), mimetype='application/json')

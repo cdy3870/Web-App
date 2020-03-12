@@ -30,6 +30,25 @@ def load_entity(client, item_id):
     log('retrieved entity for ' + item_id)
     return entity
 
+def get_list_items():
+    """Retrieve the list items we've already stored."""
+    client = get_client()
+
+    # we build a query
+    query = client.query(kind=IT_ENTITY_TYPE)
+
+    # we execute the query
+    items = list(query.fetch())
+
+    # the code below converts the datastore entities to plain old objects -
+    # this is good for decoupling the rest of our app from datastore.
+    result = list()
+    for item in items:
+        result.append(convert_to_object(item))
+
+    log('list retrieved. %s items' % len(result))
+    return result
+
 def create_list_item(item):
     client = get_client()
     key = load_key(client)
