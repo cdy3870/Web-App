@@ -1,3 +1,22 @@
+function displayList(result, targetUrl) {
+    if (result && result.length) {
+        let text = '<ul>';
+        for (var i = 0; i < result.length; i++) {
+        text += '<li id="li_' + result[i].id + '">';
+        text += '<button onclick="editItem(\'' + result[i].id + '\');">edit</button> ';
+        text += '<button onclick="deleteItem(\'' + result[i].id + '\');">x</button> ';
+        text += result[i].quantity + ') ' + result[i].title;
+        text += '</li>';
+        }
+        text += '</ul>';
+        console.log("updating DisplayArea: " + text);
+        document.getElementById("DisplayArea").innerHTML = text;
+    } else {
+        document.getElementById("DisplayArea").innerHTML = 'No list items.';
+    }
+
+}
+
 function saveItem(id) {
 
     let params = {};
@@ -10,11 +29,11 @@ function saveItem(id) {
         params['quantity'] = document.getElementById("weekly_price").value;
         params['title'] = document.getElementById("title").value;
     }
-    sendJsonRequest(params, '/upload', itemSaved);
+    sendJsonRequest(params, '/save-item', itemSaved);
 }
 
 function loadItems() {
-    console.log("loading items")
+    alert(display)
     getData('/load-items', displayList);
 }
 
