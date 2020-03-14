@@ -45,11 +45,11 @@ function saveItem(id) {
         params['quantity'] = document.getElementById("weekly_price").value;
         params['title'] = document.getElementById("title").value;
     }
+    alert("testsave")
     sendJsonRequest(params, '/save-item', itemSaved);
 }
 
-function loadItems() {
-    alert(display)
+function loadItems() { 
     getData('/load-items', displayList);
 }
 
