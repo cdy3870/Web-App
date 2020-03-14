@@ -34,7 +34,6 @@ function displayList(result, targetUrl) {
 }
 
 function saveItem(id) {
-
     let params = {};
     if (id) {
         params['id'] = id;
@@ -45,6 +44,7 @@ function saveItem(id) {
         params['quantity'] = document.getElementById("weekly_price").value;
         params['title'] = document.getElementById("title").value;
     }
+    
     sendJsonRequest(params, '/save-item', itemSaved);
 }
 
@@ -82,4 +82,6 @@ function createXmlHttp() {
     }
     return xmlhttp;
 }
+
+
 
