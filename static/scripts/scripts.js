@@ -19,16 +19,16 @@ function displayList(result, targetUrl) {
         let text = '<ul>';
         for (var i = 0; i < result.length; i++) {
         text += '<li id="li_' + result[i].id + '">';
-        text += '<button onclick="editItem(\'' + result[i].id + '\');">edit</button> ';
-        text += '<button onclick="deleteItem(\'' + result[i].id + '\');">x</button> ';
-        text += result[i].quantity + ') ' + result[i].title;
+        //text += '<button onclick="editItem(\'' + result[i].id + '\');">edit</button> ';
+        //text += '<button onclick="deleteItem(\'' + result[i].id + '\');">x</button> ';
+        text += result[i].title + ') ' + result[i].weekly_price;
         text += '</li>';
         }
         text += '</ul>';
         console.log("updating DisplayArea: " + text);
-        document.getElementById("DisplayArea").innerHTML = text;
+        document.getElementById("ItemList").innerHTML = text;
     } else {
-        document.getElementById("DisplayArea").innerHTML = 'No list items.';
+        document.getElementById("ItemList").innerHTML = 'No list items.';
     }
 
 }
@@ -45,7 +45,6 @@ function saveItem(id) {
         params['title'] = document.getElementById("title").value;
     }
 
-    alert("testsave")
     sendJsonRequest(params, '/save-item', itemSaved);
 }
 
@@ -55,14 +54,17 @@ function loadItems() {
 
 function getData(targetUrl, callbackFunction) {
     let xmlHttp = createXmlHttp();
+    
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4) {
+            console.log(xmlHttp.responseText);
             // note that you can check xmlHttp.status here for the HTTP response code
             try {
                 let myObject = JSON.parse(xmlHttp.responseText);
                 callbackFunction(myObject, targetUrl);
             } catch (exc) {
-                console.log("There was a problem at the server.");
+                console.log(exc);
+                console.log("There was a problem at the server!");
             }
         }
     }

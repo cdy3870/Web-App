@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
+    <script src="static/scripts/scripts.js?newversion"></script>
     <link rel="stylesheet" href="static\css\StyleSheet.css">
   </head>
   <body>
@@ -45,6 +45,20 @@
             </div>
         </div>
     </div>-->
+
+    <div id="ItemList">
+        <table>
+            <tr>
+                <td>Quantity:</td>
+                <td>Item:</td>
+            </tr>
+            <tr>
+                <td><input type="number" id="weekly_price"></td>
+                <td><input type="text" id="title"></td>
+            </tr>
+        </table>
+    </div>
+    
 
     <table>
       <tr>
@@ -183,7 +197,7 @@
       </tr>
     </table>
 
-
+    <script>loadItems()</script>
 
   </body>
 </head>

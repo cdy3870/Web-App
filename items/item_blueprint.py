@@ -1,8 +1,9 @@
-from flask import flash, redirect, session, url_for, render_template, Blueprint, request
+from flask import flash, redirect, session, url_for, render_template, Blueprint, request, Response
 from functools import wraps
 from items.item import Item
 import items.manage 
 import uuid
+import json
 
 item_bp = Blueprint('item_blueprint', __name__, template_folder='templates')
 
@@ -44,7 +45,7 @@ def load_items():
         json_list.append(d)
 
     responseJson = json.dumps(json_list)
-    return flask.Response(responseJson, mimetype='application/json')
+    return Response(responseJson, mimetype='application/json')
 
 @item_bp.route('/save-item', methods=['POST'])
 def save_item():

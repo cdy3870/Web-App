@@ -5,4 +5,4 @@ class Item(object):
         self.id = id
 
     def to_dict(self):
-        return {'title': self.title, 'quantity': self.weekly_price}
+        return {'title': self.title, 'weekly_price': self.weekly_price}
