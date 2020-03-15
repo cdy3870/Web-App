@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="static/scripts/scripts.js?newversion"></script>
+    <script src="static/scripts/scripts.js?newversion26"></script>
     <link rel="stylesheet" href="static\css\StyleSheet.css">
   </head>
   <body>
@@ -45,64 +45,23 @@
             </div>
         </div>
     </div>-->
-
-    <div id="ItemList">
-        <table>
-            <tr>
-                <td>Quantity:</td>
-                <td>Item:</td>
-            </tr>
-            <tr>
-                <td><input type="number" id="weekly_price"></td>
-                <td><input type="text" id="title"></td>
-            </tr>
-        </table>
-    </div>
     
-
     <table>
       <tr>
         <td class="w50">
 
           <div class="container w100">
             <h3>Item List</h3>
-            <table class="table table-dark">
-              <thead>
+            <table class="table table-dark" id="ItemTable">
+            <thead>
                 <tr>
-                  <th scope="col">#</th>
                   <th scope="col">Item</th>
-                  <th scope="col">Daily Renting Price</th>
-                  <th scope="col">Weekly Renting Price</th>
-                  <th scope="col">Monthly Renting Price</th>
-                  <th scope="col">Details</th>
+                  <th scope="col">Daily Price</th>
+                  <th scope="col">Weekly Price</th>
+                  <th scope="col">Monthly Price</th>
+                  <th scope="col">Description</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Car</td>
-                  <td>$10</td>
-                  <td>$100</td>
-                  <td>$1000</td>
-                  <td><button>View</button></td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>Guitar</td>
-                  <td>$5</td>
-                  <td>$50</td>
-                  <td>$200</td>
-                  <td><button>View</button></td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>Grand Piano</td>
-                  <td>$200</td>
-                  <td>$1000</td>
-                  <td>$2000</td>
-                  <td><button>View</button></td>
-                </tr>
-              </tbody>
             </table>
           </div>
       
@@ -151,7 +110,7 @@
                 
           <div class="container w100">
             <h3>Details</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac odio non arcu tempus maximus. Sed consectetur lobortis sollicitudin. Aenean feugiat feugiat felis sed volutpat. Phasellus vehicula lacinia nisi. Aenean vitae erat interdum, interdum urna bibendum, mattis velit. Donec placerat rhoncus interdum. Nunc tristique non sapien ac dapibus. Suspendisse vestibulum gravida purus id tincidunt. Vivamus nec urna dolor. Praesent commodo tortor euismod hendrerit pharetra. Sed velit turpis, tristique sit amet consequat vitae, tincidunt sed purus. Proin varius auctor ornare. Phasellus luctus massa ac arcu elementum, eu vulputate ante varius. In molestie rhoncus magna, ullamcorper luctus nisi laoreet eu. Duis ante sapien, suscipit et pretium et, imperdiet nec enim. Phasellus volutpat lectus malesuada laoreet sagittis.</p>
+            <p id="details">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac odio non arcu tempus maximus. Sed consectetur lobortis sollicitudin. Aenean feugiat feugiat felis sed volutpat. Phasellus vehicula lacinia nisi. Aenean vitae erat interdum, interdum urna bibendum, mattis velit. Donec placerat rhoncus interdum. Nunc tristique non sapien ac dapibus. Suspendisse vestibulum gravida purus id tincidunt. Vivamus nec urna dolor. Praesent commodo tortor euismod hendrerit pharetra. Sed velit turpis, tristique sit amet consequat vitae, tincidunt sed purus. Proin varius auctor ornare. Phasellus luctus massa ac arcu elementum, eu vulputate ante varius. In molestie rhoncus magna, ullamcorper luctus nisi laoreet eu. Duis ante sapien, suscipit et pretium et, imperdiet nec enim. Phasellus volutpat lectus malesuada laoreet sagittis.</p>
             <p>Retail Price: $50000</p>
             <button>Add to Cart</button>
           </div>

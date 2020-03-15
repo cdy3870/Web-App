@@ -21,7 +21,7 @@ def load_key(client, item_id=None):
 
 def convert_to_object(entity):
     item_id = entity.key.id_or_name
-    return Item(item_id, entity['title'], entity['weekly_price'])
+    return Item(item_id, entity['title'], entity['daily_price'], entity['weekly_price'], entity['monthly_price'])
 
 def load_entity(client, item_id):
     """Load a datstore entity using a particular client, and the ID."""
@@ -54,10 +54,12 @@ def create_list_item(item):
     key = load_key(client)
     item.id = key.id_or_name
     entity = datastore.Entity(key)
-    entity['weekly_price'] = item.weekly_price
     entity['title'] = item.title
+    entity['daily_price'] = item.daily_price
+    entity['weekly_price'] = item.weekly_price
+    entity['monthly_price'] = item.monthly_price
+    entity['description'] = item.description
     client.put(entity)
-    print(client.get(load_key(client, item.id)))
     log('saved new entity for ID: %s' % key.id_or_name)
 
 """def save_list_item(shopping_list_item):

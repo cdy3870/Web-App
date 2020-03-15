@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="static\css\StyleSheet.css">
-    <script src="static/scripts/scripts.js?newversion"></script>
+    <script src="static/scripts/scripts.js?newversion8"></script>
   </head>
   
   <body>
@@ -28,8 +28,14 @@
       <form action="" method="post" onsubmit="saveItem()">
         <input type="text" placeholder="Title" id="title" name="title" value="{{
           request.form.title }}">
+        <input type="text" placeholder="Daily Price" id="daily_price" name="daily_price" value="{{
+          request.form.daily_price }}">
          <input type="text" placeholder="Weekly Price" id="weekly_price" name="weekly_price" value="{{
           request.form.weekly_price }}">
+         <input type="text" placeholder="Monthly Price" id="monthly_price" name="monthly_price" value="{{
+          request.form.monthly_price }}">
+         <input type="text" placeholder="Description" id="description" name="description" value="{{
+          request.form.description }}">
         <input class="btn btn-default" type="submit" value="Upload">
       </form>
 

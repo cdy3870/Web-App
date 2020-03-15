@@ -50,27 +50,38 @@ def load_items():
 @item_bp.route('/save-item', methods=['POST'])
 def save_item():
 
-	item_title = None
-	weekly_price = None
-	if 'title' in request.form:
+    title = None
+    item_title = None
+    daily_price = None
+    weekly_price = None
+    monthly_price = None
+    description = None
+
+    if 'title' in request.form:
 	    item_title = request.form['title']
-	if 'weekly_price' in request.form:
+    if 'daily_price' in request.form:
+	    daily_price = request.form['daily_price']
+    if 'weekly_price' in request.form:
 	    weekly_price = request.form['weekly_price']
-	json_result = {}
+    if 'monthly_price' in request.form:
+	    monthly_price = request.form['monthly_price']
+    if 'description' in request.form:
+	    description = request.form['description']
+    json_result = {}
 
-	item_id = 0
+    item_id = 0
 
-	try:
+    try:
 	    if item_id:
-	        item = Item(item_id, title, weekly_price)
+	        item = Item(item_id, title, daily_price, weekly_price, monthly_price, description) 
 	        items.manage.log('saving list item for ID: %s' % item_id)
 	        #manage.save_list_item(item)
 	    else:
 	        items.manage.log('saving new list item')
-	        items.manage.create_list_item(Item(None, item_title, weekly_price))
+	        items.manage.create_list_item(Item(None, item_title, daily_price, weekly_price, monthly_price, description))
 	    json_result['ok'] = True
-	except Exception as exc:
+    except Exception as exc:
 	    items.manage.log(str(exc))
 	    json_result['error'] = 'The item was not saved.'
 
-	return flask.Response(json.dumps(json_result), mimetype='application/json')
+    return Response(json.dumps(json_result), mimetype='application/json')
