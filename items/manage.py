@@ -9,34 +9,39 @@ def log(msg):
 def get_client():
     return datastore.Client()
 
-def load_key(client, item_id=None):
+def load_key(client, kind, item_id=None):
     
     if item_id:
-        key = client.key(IT_ENTITY_TYPE, int(item_id))
+        key = client.key(kind, int(item_id))
     else:
-        print("test")
-        key = client.key(IT_ENTITY_TYPE)
+        key = client.key(kind)
     
     return key
 
 def convert_to_object(entity):
     item_id = entity.key.id_or_name
-    return Item(item_id, entity['title'], entity['daily_price'], entity['weekly_price'], entity['monthly_price'])
+    return Item(item_id, entity['title'], entity['daily_price'], entity['weekly_price'], entity['monthly_price'], entity['description'], entity['retail_price'], entity['kind'], entity['rented'])
 
 def load_entity(client, item_id):
     """Load a datstore entity using a particular client, and the ID."""
-    key = load_key(client, item_id)
+    key = load_key(client, IT_ENTITY_TYPE, item_id)
     entity = client.get(key)
     log('retrieved entity for ' + item_id)
     return entity
 
-def get_list_items():
+def load_entity_kind(client, item_id, kind):
+    """Load a datstore entity using a particular client, and the ID."""
+    key = load_key(client, kind, item_id)
+    entity = client.get(key)
+    log('retrieved entity for ' + item_id)
+    return entity
+
+def get_list_items(kind):
     """Retrieve the list items we've already stored."""
     client = get_client()
-
     # we build a query
-    query = client.query(kind=IT_ENTITY_TYPE)
-
+    query = client.query(kind=kind)
+    query.add_filter('rented', '=', False)
     # we execute the query
     items = list(query.fetch())
 
@@ -44,14 +49,15 @@ def get_list_items():
     # this is good for decoupling the rest of our app from datastore.
     result = list()
     for item in items:
+        print(item)
         result.append(convert_to_object(item))
-
+    
     log('list retrieved. %s items' % len(result))
     return result
 
 def create_list_item(item):
     client = get_client()
-    key = load_key(client)
+    key = load_key(client, item.kind)
     item.id = key.id_or_name
     entity = datastore.Entity(key)
     entity['title'] = item.title
@@ -59,8 +65,29 @@ def create_list_item(item):
     entity['weekly_price'] = item.weekly_price
     entity['monthly_price'] = item.monthly_price
     entity['description'] = item.description
+    entity['retail_price'] = item.retail_price
+    entity['kind'] = item.kind
+    entity['rented'] = item.rented
     client.put(entity)
     log('saved new entity for ID: %s' % key.id_or_name)
+
+def edit_list_item(item_id, kind):
+    client = get_client()
+    key = load_key(client, kind)
+    entity = load_entity(client, item_id)
+    for prop in entity:
+        entity[prop] = entity[prop]
+    entity['rented'] = True
+    client.put(entity)
+    #print(client.get(key)['rented'])
+    
+
+def get_list_item(item_id):
+    """Retrieve an object for the ShoppingListItem with the specified ID."""
+    client = get_client()
+    log('retrieving object for ID: %s' % item_id)
+    entity = load_entity(client, item_id)
+    return convert_to_object(entity)
 
 """def save_list_item(shopping_list_item):
     #Save an existing list item from an object.
@@ -70,10 +97,10 @@ def create_list_item(item):
     client.put(entity)
     log('entity saved for ID: %s' % shopping_list_item.id)"""
 
-"""def delete_list_item(sli_id):
+def delete_list_item(item_id, kind):
     #Delete the entity associated with the specified ID.
     client = get_client()
-    key = load_key(client, sli_id)
-    log('key loaded for ID: %s' % sli_id)
+    key = load_key(client, kind, item_id)
+    log('key loaded for ID: %s' % item_id)
     client.delete(key)
-    log('key deleted for ID: %s' % sli_id)"""
+    log('key deleted for ID: %s' % item_id)
