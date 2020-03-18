@@ -1,10 +1,10 @@
 from google.cloud import datastore
-from items.item import Item
+from user import User
 
-IT_ENTITY_TYPE = 'Item'
+IT_ENTITY_TYPE = 'User'
 
 def log(msg):
-    print('itemdata: %s' % msg)
+    print('userdata: %s' % msg)
 
 def get_client():
     return datastore.Client()
@@ -19,8 +19,8 @@ def load_key(client, kind, item_id=None):
     return key
 
 def convert_to_object(entity):
-    item_id = entity.key.id_or_name
-    return Item(item_id, entity['title'], entity['daily_price'], entity['weekly_price'], entity['monthly_price'], entity['description'], entity['retail_price'], entity['kind'], entity['rented'])
+    user_id = entity.key.id_or_name
+    return User(user_id, entity['pass_hash'], entity['email'], entity['first_name'], entity['last_name'])
 
 def load_entity(client, item_id):
     """Load a datstore entity using a particular client, and the ID."""
@@ -55,23 +55,27 @@ def get_list_items(kind):
     log('list retrieved. %s items' % len(result))
     return result
 
-def create_list_item(item):
+def create_list_item(user):
     client = get_client()
-    key = load_key(client, item.kind)
-    item.id = key.id_or_name
+    key = load_key(client, IT_ENTITY_TYPE)
+    user.id = key.id_or_name
     entity = datastore.Entity(key)
-    entity['title'] = item.title
-    entity['daily_price'] = item.daily_price
-    entity['weekly_price'] = item.weekly_price
-    entity['monthly_price'] = item.monthly_price
-    entity['description'] = item.description
-    entity['retail_price'] = item.retail_price
-    entity['kind'] = item.kind
-    entity['rented'] = item.rented
+    entity['password'] = user.password
+    entity['email'] = user.email
+    entity['first_name'] = user.first_name
+    entity['last_name'] = user.last_name
     client.put(entity)
     log('saved new entity for ID: %s' % key.id_or_name)
 
-def edit_list_item(item_id, kind):
+def get_passhash(username):
+    client = get_client()
+    query = client.query(kind=IT_ENTITY_TYPE)
+    query.add_filter('email', '=', username)
+    if len(list(query.fetch())) == 0:
+        return ""
+    return list(query.fetch())[0]['password']
+
+"""def edit_list_item(item_id, kind):
     client = get_client()
     key = load_key(client, kind)
     entity = load_entity(client, item_id)
@@ -84,19 +88,19 @@ def edit_list_item(item_id, kind):
     
 
 def get_list_item(item_id):
-    """Retrieve an object for the ShoppingListItem with the specified ID."""
+    #Retrieve an object for the ShoppingListItem with the specified ID.
     client = get_client()
     log('retrieving object for ID: %s' % item_id)
     entity = load_entity(client, item_id)
     return convert_to_object(entity)
 
-"""def save_list_item(shopping_list_item):
+def save_list_item(shopping_list_item):
     #Save an existing list item from an object.
     client = get_client()
     entity = load_entity(client, shopping_list_item.id)
     entity.update(shopping_list_item.to_dict())
     client.put(entity)
-    log('entity saved for ID: %s' % shopping_list_item.id)"""
+    log('entity saved for ID: %s' % shopping_list_item.id)
 
 def delete_list_item(item_id, kind):
     #Delete the entity associated with the specified ID.
@@ -104,4 +108,4 @@ def delete_list_item(item_id, kind):
     key = load_key(client, kind, item_id)
     log('key loaded for ID: %s' % item_id)
     client.delete(key)
-    log('key deleted for ID: %s' % item_id)
+    log('key deleted for ID: %s' % item_id)"""
