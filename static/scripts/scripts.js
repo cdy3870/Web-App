@@ -65,43 +65,64 @@ function createXmlHttp() {
 
 //Getting JSON Responses
 function getData(targetUrl, callbackFunction) {
-    let xmlHttp = createXmlHttp();
-    
-    xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4) {
-            // note that you can check xmlHttp.status here for the HTTP response code
-            try {
-                let myObject = JSON.parse(xmlHttp.responseText);
-                callbackFunction(myObject, targetUrl);
-            } catch (exc) {
-                console.log("There was a problem at the server!");
-            }
-        }
-    }
-    xmlHttp.open("GET", targetUrl, true);
-    xmlHttp.send();
+    getAJAX(targetUrl, callbackFunction);
 }
 
 //Sending JSON Requests
 function sendJsonRequest(parameterObject, targetUrl, callbackFunction) {
-    var xmlHttp = createXmlHttp();
-    xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4) {
-            var myObject = JSON.parse(xmlHttp.responseText);
-            callbackFunction(myObject, targetUrl, parameterObject);
-        }
-    }
     console.log(targetUrl);
     console.log(parameterObject);
-    postParameters(xmlHttp, targetUrl, objectToParameters(parameterObject));
+    postAJAX(targetUrl, callbackFunction, objectToParameters(parameterObject));
 }
 
-function postParameters(xmlHttp, target, parameters) {
-    if (xmlHttp) {
-        xmlHttp.open("POST", target, true); // XMLHttpRequest.open(method, url, async)
-        var contentType = "application/x-www-form-urlencoded";
-        xmlHttp.setRequestHeader("Content-type", contentType);
-        xmlHttp.send(parameters);
+// AJAX get request
+function getAJAX(url, callback) {
+    var xmlHttp = createXmlHttp();
+    xmlHttp.open("GET", url, true); // async
+    xmlHttp.onreadystatechange = function () {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            console.log("[AJAX]: HTTP GET request success. url: " + url);
+            if (callback) {
+                var obj = null;
+                try {
+                    obj = JSON.parse(xmlHttp.responseText);
+                } catch (e) {
+                    console.log("[AJAX]: JSON parse failed! ResponseText:" + xmlHttp.responseText);
+                }
+                if (obj !== null) callback(obj);
+            }
+        }
+    }
+    try {
+        xmlHttp.send(data);
+    } catch (e) {
+        console.log("[AJAX]: HTTP GET request failed! url: " + url);
+    }
+}
+
+// AJAX post request
+function postAJAX(url, callback, data) {
+    var xmlHttp = createXmlHttp();
+    xmlHttp.open("POST", url, true); // async
+    xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlHttp.onreadystatechange = function () {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            console.log("[AJAX]: HTTP POST request success. url: " + url);
+            if (callback) {
+                var obj = null;
+                try {
+                    obj = JSON.parse(xmlHttp.responseText);
+                } catch (e) {
+                    console.log("[AJAX]: JSON parse failed! ResponseText:" + xmlHttp.responseText);
+                }
+                if (obj !== null) callback(obj);
+            }
+        }
+    }
+    try {
+        xmlHttp.send(data);
+    } catch (e) {
+        console.log("[AJAX]: HTTP POST request failed! url: " + url);
     }
 }
 
@@ -236,7 +257,7 @@ function clearItemForm(kind) {
     }
 }
  
-function itemSaved(result, targetUrl, params) {
+function itemSaved(result) {
     if (result && result.ok) {
         console.log("Saved item.");
         //clearItemForm(result.kind);
@@ -247,7 +268,7 @@ function itemSaved(result, targetUrl, params) {
     }
 }
 
-function rentedItemSaved(result, targetUrl, params) {
+function rentedItemSaved(result) {
     if (result && result.ok) {
         console.log("Saved item.");
         //clearItemForm(result.kind);
@@ -258,7 +279,7 @@ function rentedItemSaved(result, targetUrl, params) {
     }
 }
 
-function itemDeleted(result, targetUrl, params) {
+function itemDeleted(result) {
     if (result && result.ok) {
         console.log("Deleted item.");
         loadItems('Item');
@@ -268,7 +289,7 @@ function itemDeleted(result, targetUrl, params) {
     }
 }
 
-function itemEdited(result, targetUrl, params) {
+function itemEdited(result) {
     if (result && result.ok) {
         console.log("Edited item.");
         loadItems('Item');
@@ -278,7 +299,7 @@ function itemEdited(result, targetUrl, params) {
     }
 }
 
-function itemReturned(result, targetUrl) {
+function itemReturned(result) {
     if (result && result.ok) {
         console.log("Returned item.");
         loadItems('Item');
