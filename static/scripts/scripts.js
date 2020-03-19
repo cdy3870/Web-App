@@ -1,23 +1,27 @@
 //Saving Items
-function saveItem(kind) {
+function saveItem(kind, result=undefined, price=undefined) {
     let params = {};
+    console.log(kind);
     if (kind == 'Item') {
+        console.log("item saved");
         params['retail_price'] = document.getElementById("retail_price").value;
         params['description'] = document.getElementById("description").value;
         params['monthly_price'] = document.getElementById("monthly_price").value;
         params['daily_price'] = document.getElementById("daily_price").value;
         params['weekly_price'] = document.getElementById("weekly_price").value;
-        params['title'] = document.getElementById("title").value;
+        params['title'] = document.getElementById("title").value; 
+        sendJsonRequest(params, '/save-item/' + kind, itemSaved);
     } 
-    /*else {
+    else {
+        console.log("rented item saved");
         params['retail_price'] = result.retail_price;
         params['description'] = result.description;
-        params['monthly_price'] = result.monthly_price;
-        params['daily_price'] = result.daily_price;
-        params['weekly_price'] = result.weekly_price;
+        params['monthly_price'] = price;   
         params['title'] = result.title;
-    }*/
-    sendJsonRequest(params, '/save-item/' + kind, itemSaved);
+        params['rentee'] = result.rentee
+        sendJsonRequest(params, '/save-item/' + kind, rentedItemSaved);
+    }
+    
 }
 
 //Loading Items
@@ -35,6 +39,14 @@ function deleteItem(id, kind) {
 function changeItem(id, kind) {
     let params = {"id": id};
     sendJsonRequest(params, '/change-item/' + kind, itemEdited);
+}
+
+function showDetails(id){
+    getData('/get-item/' + id, itemLoaded);
+}
+
+function returnItem(id){
+    getData('/get-item/' + id, itemReturned);
 }
 
 //Creating XmlHTTP
@@ -105,45 +117,76 @@ function objectToParameters(obj) {
 
 //Loading Items Helper Methods
 function displayList(result, targetUrl) {
-    document.getElementById("ItemTable").innerHTML = '';
-    if (result && result.length) {
-        let text = '<ul>';
-        let table = document.getElementById("ItemTable");
-        for (var i = 0; i < result.length; i++) {
-            let row = table.insertRow();           
-            let cell = row.insertCell();
-            let text = document.createTextNode(result[i].title)
-            cell.appendChild(text);
-            cell = row.insertCell();
-            text = document.createTextNode("$" + result[i].daily_price)
-            cell.appendChild(text);
-            cell = row.insertCell();
-            text = document.createTextNode("$" + result[i].weekly_price)
-            cell.appendChild(text);
-            cell = row.insertCell();
-            text = document.createTextNode("$" + result[i].monthly_price)
-            cell.appendChild(text);
+    console.log(result);
+        if (result && result.length) {
+            if (result[0].kind == 'Item'){
+                console.log("Items loaded");
+                document.getElementById("ItemTable").innerHTML = '';
+                let table = document.getElementById("ItemTable");
+                for (var i = 0; i < result.length; i++) {
+                    let row = table.insertRow();           
+                    let cell = row.insertCell();
+                    let text = document.createTextNode(result[i].title)
+                    cell.appendChild(text);
+                    cell = row.insertCell();
+                    text = document.createTextNode("$" + result[i].daily_price)
+                    cell.appendChild(text);
+                    cell = row.insertCell();
+                    text = document.createTextNode("$" + result[i].weekly_price)
+                    cell.appendChild(text);
+                    cell = row.insertCell();
+                    text = document.createTextNode("$" + result[i].monthly_price)
+                    cell.appendChild(text);
 
-            var button = document.createElement("button");
-            button.innerHTML = "View";
-            button.id = i;
+                    var button = document.createElement("button");
+                    button.innerHTML = "View";
+                    button.id = i;
 
-            button.addEventListener ("click", function() {
-                showDetails(String(result[this.id].id));
-            });
-            cell = row.insertCell();
-            cell.appendChild(button);
+                    button.addEventListener ("click", function() {
+                        showDetails(String(result[this.id].id));
+                    });
+                    cell = row.insertCell();
+                    cell.appendChild(button);
+                }
+
+            }
+            else{
+                document.getElementById("RentedTable").innerHTML = '';
+                console.log("Rented items loaded");
+                let table = document.getElementById("RentedTable");
+                for (var i = 0; i < result.length; i++) {
+                    let row = table.insertRow();           
+                    let cell = row.insertCell();
+                    let text = document.createTextNode(result[i].title)
+                    cell.appendChild(text);
+                    cell = row.insertCell();
+                    text = document.createTextNode("$" + result[i].monthly_price)
+                    cell.appendChild(text);
+                    cell = row.insertCell();
+                    text = document.createTextNode("April 20, 2020")
+                    cell.appendChild(text);
+
+                    var button = document.createElement("button");
+                    button.innerHTML = "Return";
+                    button.id = i;
+
+                    button.addEventListener ("click", function() {
+                        console.log(String(result[this.id].id))
+                        returnItem(String(result[this.id].id));
+                    });
+                    cell = row.insertCell();
+                    cell.appendChild(button);
+                }
+
+            } 
+
         }
+        else {
+                document.getElementById("ItemTable").innerHTML = 'No list items.';
+            } 
+}  
 
-    } else {
-        document.getElementById("ItemTable").innerHTML = 'No list items.';
-    }
 
-}
-
-function showDetails(id){
-    getData('/get-item/' + id, itemLoaded);
-}
 
 function itemLoaded(result, targetUrl) {
     console.log(result);
@@ -163,7 +206,6 @@ function itemLoaded(result, targetUrl) {
     
     
     dailyButton.addEventListener ("click", function() {
-        //saveItem('rented', result)
         addRentedItem(result, result.daily_price);
     });
     weeklyButton.addEventListener ("click", function() {
@@ -181,7 +223,8 @@ function itemLoaded(result, targetUrl) {
 
 }
 
-//Saving Items Helper Methods
+
+
 function clearItemForm(kind) {
     if(kind == 'Item'){
         document.getElementById("weekly_price").value = '';
@@ -196,8 +239,19 @@ function clearItemForm(kind) {
 function itemSaved(result, targetUrl, params) {
     if (result && result.ok) {
         console.log("Saved item.");
-        clearItemForm(result.kind);
-        //loadItems(result.kind);
+        //clearItemForm(result.kind);
+        loadItems('Item');
+    } else {
+        console.log("Received error: " + result.error);
+        //showError(result.error);
+    }
+}
+
+function rentedItemSaved(result, targetUrl, params) {
+    if (result && result.ok) {
+        console.log("Saved item.");
+        //clearItemForm(result.kind);
+        loadItems('RentedItem');
     } else {
         console.log("Received error: " + result.error);
         //showError(result.error);
@@ -224,8 +278,19 @@ function itemEdited(result, targetUrl, params) {
     }
 }
 
+function itemReturned(result, targetUrl) {
+    if (result && result.ok) {
+        console.log("Returned item.");
+        loadItems('Item');
+        loadItems('RentedItem');
+    } else {
+        console.log("Received error: " + result.error);
+        //showError(result.error);
+    }
+}
+
 function addRentedItem(result, price){
-    let table = document.getElementById("RentedTable")
+    /*let table = document.getElementById("RentedTable")
     let row = table.insertRow();
     let text = document.createTextNode(result.title)
     let cell = row.insertCell();
@@ -242,11 +307,9 @@ function addRentedItem(result, price){
     
     });
     cell = row.insertCell();
-    cell.appendChild(returnButton);
+    cell.appendChild(returnButton);*/
     //deleteItem(String(result.id), result.kind);
+    saveItem('RentedItem', result, price)
     changeItem(String(result.id), result.kind)
 }
-
-
-
 

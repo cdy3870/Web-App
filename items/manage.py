@@ -20,7 +20,7 @@ def load_key(client, kind, item_id=None):
 
 def convert_to_object(entity):
     item_id = entity.key.id_or_name
-    return Item(item_id, entity['title'], entity['daily_price'], entity['weekly_price'], entity['monthly_price'], entity['description'], entity['retail_price'], entity['kind'], entity['rented'])
+    return Item(item_id, entity['title'], entity['daily_price'], entity['weekly_price'], entity['monthly_price'], entity['description'], entity['retail_price'], entity['kind'], entity['rented'], entity['rentee'])
 
 def load_entity(client, item_id):
     """Load a datstore entity using a particular client, and the ID."""
@@ -36,12 +36,17 @@ def load_entity_kind(client, item_id, kind):
     log('retrieved entity for ' + item_id)
     return entity
 
-def get_list_items(kind):
+def get_list_items(kind, username):
     """Retrieve the list items we've already stored."""
     client = get_client()
     # we build a query
     query = client.query(kind=kind)
     query.add_filter('rented', '=', False)
+    if kind == "RentedItem":
+        query.add_filter('rentee', '=', username)
+    #else:
+        #query.add_filter('rentee', '>', username)
+        #query.add_filter('rentee', '<', username)
     # we execute the query
     items = list(query.fetch())
 
@@ -49,13 +54,12 @@ def get_list_items(kind):
     # this is good for decoupling the rest of our app from datastore.
     result = list()
     for item in items:
-        print(item)
         result.append(convert_to_object(item))
     
     log('list retrieved. %s items' % len(result))
     return result
 
-def create_list_item(item):
+def create_list_item(item, kind):
     client = get_client()
     key = load_key(client, item.kind)
     item.id = key.id_or_name
@@ -68,6 +72,7 @@ def create_list_item(item):
     entity['retail_price'] = item.retail_price
     entity['kind'] = item.kind
     entity['rented'] = item.rented
+    entity['rentee'] = item.rentee
     client.put(entity)
     log('saved new entity for ID: %s' % key.id_or_name)
 
@@ -104,4 +109,18 @@ def delete_list_item(item_id, kind):
     key = load_key(client, kind, item_id)
     log('key loaded for ID: %s' % item_id)
     client.delete(key)
+    log('key deleted for ID: %s' % item_id)
+
+def return_list_item(item_id, kind):
+    #Delete the entity associated with the specified ID.
+    client = get_client()
+    key = load_key(client, kind, item_id)
+    entity = load_entity(client, item_id)
+    print(entity)
+    for prop in entity:
+        entity[prop] = entity[prop]
+    entity['rented'] = False
+    entity['rentee'] = ''
+    print(entity)
+    client.put(entity)
     log('key deleted for ID: %s' % item_id)

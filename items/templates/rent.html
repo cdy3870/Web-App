@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="static/scripts/scripts.js?ver1.991"></script>
+    <script src="static/scripts/scripts.js?ver2.2"></script>
     <link rel="stylesheet" href="static\css\StyleSheet.css">
   </head>
   <body>
@@ -16,7 +16,7 @@
         <a href="/upload">Upload</a>
       </div>
       <div class="float -right">
-        <a href="#user">{{username}}</a>
+        <a href="#user" id="user">{{username}}</a>
         {%- if logout -%}
         <a href="/logout">Log Out</a>
         {%- endif %}
@@ -52,7 +52,7 @@
 
           <div class="container w100">
             <h3>Item List</h3>
-            <table class="table table-dark" id="ItemTable">
+            <table class="table table-dark">
             <thead>
                 <tr>
                   <th scope="col">Item</th>
@@ -62,6 +62,7 @@
                   <th scope="col">Description</th>
                 </tr>
               </thead>
+              <tbody id = "ItemTable"></tbody>
             </table>
           </div>
       
@@ -121,7 +122,7 @@
           
           <div class="container w100">
             <h3>Rented Items</h3>
-            <table class="table table-dark" id="RentedTable">
+            <table class="table table-dark">
               <thead>
                 <tr>
                   <th scope="col">Item</th>
@@ -130,6 +131,7 @@
                   <th scope="col">Return Item</th>
                 </tr>
               </thead>
+              <tbody id="RentedTable"></tbody>
             </table>
           </div>
 
@@ -137,7 +139,10 @@
       </tr>
     </table>
 
-    <script>loadItems('Item')</script>
+    <script>
+        loadItems('Item');
+        loadItems('RentedItem');
+    </script>
 
   </body>
 </head>
