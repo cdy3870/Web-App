@@ -46,12 +46,10 @@
 }
 
 .container {
-    display: inline-block;
+  display: inline-block;
 	width: auto;
-	padding-right: 15px;
-	padding-left: 15px;
-	margin-right: auto;
-	margin-left: auto;
+	padding: 10px 15px;
+	margin: auto;
 }
 
 .w50 {
@@ -60,4 +58,33 @@
 
 .w100 {
     width: 100%;
+}
+
+.h50 {
+  height: 50%;
+}
+
+.h100 {
+	height: 100%;
+}
+
+.grid-container {
+  display: grid;
+}
+
+.grid-column-2 {
+  grid-template-columns: 50% 50%;
+}
+
+.grid-row-2 {
+  grid-template-rows: 50% 50%;
+}
+
+/* for rent page container */
+.vh30 {
+  height: 30vh;
+}
+
+.scroll-y {
+  overflow-y: scroll;
 }

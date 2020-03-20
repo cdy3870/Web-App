@@ -48,99 +48,92 @@
             </div>
         </div>
     </div>-->
-    
-    <table>
-      <tr>
-        <td class="w50">
 
-          <div class="container w100">
-            <h3>Item List</h3>
-            <table class="table table-dark">
+    <div class="grid-container grid-column-2 grid-row-2">
+
+      <div class="container w100">
+        <h3>Item List</h3>
+        <div class="container w100 vh30 scroll-y">
+          <table class="table table-dark">
+          <thead>
+              <tr>
+                <th scope="col">Item</th>
+                <th scope="col">Daily Price</th>
+                <th scope="col">Weekly Price</th>
+                <th scope="col">Monthly Price</th>
+                <th scope="col">Description</th>
+              </tr>
+            </thead>
+            <tbody id = "ItemTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="container w100">
+        <h3>Recently Rented</h3>
+        <div class="container w100 vh30 scroll-y">
+          <table class="table table-dark">
             <thead>
-                <tr>
-                  <th scope="col">Item</th>
-                  <th scope="col">Daily Price</th>
-                  <th scope="col">Weekly Price</th>
-                  <th scope="col">Monthly Price</th>
-                  <th scope="col">Description</th>
-                </tr>
-              </thead>
-              <tbody id = "ItemTable"></tbody>
-            </table>
-          </div>
-      
-        </td>
-        <td class="w50">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Item</th>
+                <th scope="col">Monthly Renting Price</th>
+                <th scope="col">Rent Again</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">1</th>
+                <td>Car</td>
+                <td>$100</td>
+                <td><button>Rent</button></td>
+              </tr>
+              <tr>
+                <th scope="row">2</th>
+                <td>Guitar</td>
+                <td>$10</td>
+                <td><button>Rent</button></td>
+              </tr>
+              <tr>
+                <th scope="row">3</th>
+                <td>Grand Piano</td>
+                <td>$200</td>
+                <td><button>Rent</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button>Checkout</button>
+      </div>
 
-          <div class="container w100">
-            <h3>Recently Rented</h3>
-            <table class="table table-dark">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Item</th>
-                  <th scope="col">Monthly Renting Price</th>
-                  <th scope="col">Rent Again</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">1</th>
-                  <td>Car</td>
-                  <td>$100</td>
-                  <td><button>Rent</button></td>
-                </tr>
-                <tr>
-                  <th scope="row">2</th>
-                  <td>Guitar</td>
-                  <td>$10</td>
-                  <td><button>Rent</button></td>
-                </tr>
-                <tr>
-                  <th scope="row">3</th>
-                  <td>Grand Piano</td>
-                  <td>$200</td>
-                  <td><button>Rent</button></td>
-                </tr>
-              </tbody>
-            </table>
-            <button>Checkout</button>
+      <div class="container w100">
+        <h3>Details</h3>
+        <div class="container w100 vh30 scroll-y">
+          <p id="details">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac odio non arcu tempus maximus. Sed consectetur lobortis sollicitudin. Aenean feugiat feugiat felis sed volutpat. Phasellus vehicula lacinia nisi. Aenean vitae erat interdum, interdum urna bibendum, mattis velit. Donec placerat rhoncus interdum. Nunc tristique non sapien ac dapibus. Suspendisse vestibulum gravida purus id tincidunt. Vivamus nec urna dolor. Praesent commodo tortor euismod hendrerit pharetra. Sed velit turpis, tristique sit amet consequat vitae, tincidunt sed purus. Proin varius auctor ornare. Phasellus luctus massa ac arcu elementum, eu vulputate ante varius. In molestie rhoncus magna, ullamcorper luctus nisi laoreet eu. Duis ante sapien, suscipit et pretium et, imperdiet nec enim. Phasellus volutpat lectus malesuada laoreet sagittis.</p>
+          <p id="retail_price">Retail Price: </p>
+          <div class="btn-group" id="buttongroup">
           </div>
-      
-        </td>
-      </tr>
-      <tr>
-        <td class="w50">
-                
-          <div class="container w100">
-            <h3>Details</h3>
-            <p id="details">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac odio non arcu tempus maximus. Sed consectetur lobortis sollicitudin. Aenean feugiat feugiat felis sed volutpat. Phasellus vehicula lacinia nisi. Aenean vitae erat interdum, interdum urna bibendum, mattis velit. Donec placerat rhoncus interdum. Nunc tristique non sapien ac dapibus. Suspendisse vestibulum gravida purus id tincidunt. Vivamus nec urna dolor. Praesent commodo tortor euismod hendrerit pharetra. Sed velit turpis, tristique sit amet consequat vitae, tincidunt sed purus. Proin varius auctor ornare. Phasellus luctus massa ac arcu elementum, eu vulputate ante varius. In molestie rhoncus magna, ullamcorper luctus nisi laoreet eu. Duis ante sapien, suscipit et pretium et, imperdiet nec enim. Phasellus volutpat lectus malesuada laoreet sagittis.</p>
-            <p id="retail_price">Retail Price: </p>
-            <div class="btn-group" id="buttongroup">
-            </div>
-          </div>
+        </div>
+      </div>
 
-        </td>
-        <td class="w50">
-          
-          <div class="container w100">
-            <h3>Rented Items</h3>
-            <table class="table table-dark">
-              <thead>
-                <tr>
-                  <th scope="col">Item</th>
-                  <th scope="col">Price</th>
-                  <th scope="col">Next Billing Date</th>
-                  <th scope="col">Return Item</th>
-                </tr>
-              </thead>
-              <tbody id="RentedTable"></tbody>
-            </table>
-          </div>
+      <div class="container w100">
+        <h3>Rented Items</h3>
+        <div class="container w100 vh30 scroll-y">
+          <table class="table table-dark">
+            <thead>
+              <tr>
+                <th scope="col">Item</th>
+                <th scope="col">Price</th>
+                <th scope="col">Next Billing Date</th>
+                <th scope="col">Return Item</th>
+              </tr>
+            </thead>
+            <tbody id="RentedTable"></tbody>
+          </table>
+        </div>
+      </div>
 
-        </td>
-      </tr>
-    </table>
+    </div>
 
     <script>
         loadItems('Item');
