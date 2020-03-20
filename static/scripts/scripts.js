@@ -86,6 +86,7 @@ function getAJAX(url, callback) {
                 var obj = null;
                 try {
                     obj = JSON.parse(xmlHttp.responseText);
+                    callback(obj, targetUrl);
                 } catch (e) {
                     console.log("[AJAX]: JSON parse failed! ResponseText:" + xmlHttp.responseText);
                 }
@@ -94,7 +95,7 @@ function getAJAX(url, callback) {
         }
     }
     try {
-        xmlHttp.send(data);
+        xmlHttp.send();
     } catch (e) {
         console.log("[AJAX]: HTTP GET request failed! url: " + url);
     }
