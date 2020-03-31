@@ -19,14 +19,15 @@ function saveItem(kind, result=undefined, price=undefined) {
         params['monthly_price'] = price;   
         params['title'] = result.title;
         params['rentee'] = result.rentee
+        params['past_rented'] = result.past_rented
         sendJsonRequest(params, '/save-item/' + kind, rentedItemSaved);
     }
     
 }
 
 //Loading Items
-function loadItems(kind) { 
-    getData('/load-items/' + kind, displayList);
+function loadItems(kind, history=false) { 
+    getData('/load-items/' + kind + '/' + history, displayList);
 }
 
 //Deleting Items
@@ -41,12 +42,14 @@ function changeItem(id, kind) {
     sendJsonRequest(params, '/change-item/' + kind, itemEdited);
 }
 
-function showDetails(id){
-    getData('/get-item/' + id, itemLoaded);
+function showDetails(id, kind){
+    getData('/get-item/' + id + '/Item', itemLoaded);
 }
 
 function returnItem(id){
-    getData('/get-item/' + id, itemReturned);
+    let params = {"id": id};
+    console.log("returning item")
+    sendJsonRequest(params, '/return-item/' + id + '/RentedItem', itemReturned);
 }
 
 //Creating XmlHTTP
@@ -139,8 +142,8 @@ function objectToParameters(obj) {
 
 //Loading Items Helper Methods
 function displayList(result, targetUrl) {
-    console.log(result);
         if (result && result.length) {
+            console.log(result);
             if (result[0].kind == 'Item'){
                 console.log("Items loaded");
                 document.getElementById("ItemTable").innerHTML = '';
@@ -173,39 +176,63 @@ function displayList(result, targetUrl) {
 
             }
             else{
-                document.getElementById("RentedTable").innerHTML = '';
-                console.log("Rented items loaded");
-                let table = document.getElementById("RentedTable");
-                for (var i = 0; i < result.length; i++) {
-                    let row = table.insertRow();           
-                    let cell = row.insertCell();
-                    let text = document.createTextNode(result[i].title)
-                    cell.appendChild(text);
-                    cell = row.insertCell();
-                    text = document.createTextNode("$" + result[i].monthly_price)
-                    cell.appendChild(text);
-                    cell = row.insertCell();
-                    text = document.createTextNode("April 20, 2020")
-                    cell.appendChild(text);
+                console.log("the kind is rented");
+                if (result[0].past_rented == false){
+                    document.getElementById("RentedTable").innerHTML = '';
+                    console.log("Rented items loaded");
+                    let table = document.getElementById("RentedTable");
+                    for (var i = 0; i < result.length; i++) {
+                        let row = table.insertRow();           
+                        let cell = row.insertCell();
+                        let text = document.createTextNode(result[i].title)
+                        cell.appendChild(text);
+                        cell = row.insertCell();
+                        text = document.createTextNode("$" + result[i].monthly_price)
+                        cell.appendChild(text);
+                        cell = row.insertCell();
+                        text = document.createTextNode("April 20, 2020")
+                        cell.appendChild(text);
 
-                    var button = document.createElement("button");
-                    button.innerHTML = "Return";
-                    button.id = i;
+                        var button = document.createElement("button");
+                        button.innerHTML = "Return";
+                        button.id = i;
 
-                    button.addEventListener ("click", function() {
-                        console.log(String(result[this.id].id))
-                        returnItem(String(result[this.id].id));
-                    });
-                    cell = row.insertCell();
-                    cell.appendChild(button);
+                        button.addEventListener ("click", function() {
+                            console.log(String(result[this.id].id))
+                            returnItem(String(result[this.id].id));
+                        });
+                        cell = row.insertCell();
+                        cell.appendChild(button);
+                    }
+                }
+                else{
+                    document.getElementById("RentHistoryTable").innerHTML = '';
+                    let table = document.getElementById("RentHistoryTable");
+                    for (var i = 0; i < result.length; i++) {
+                        let row = table.insertRow();           
+                        let cell = row.insertCell();
+                        let text = document.createTextNode(result[i].title)
+                        cell.appendChild(text);
+                        cell = row.insertCell();
+                        text = document.createTextNode("$" + result[i].monthly_price)
+                        cell.appendChild(text);
+
+                        var button = document.createElement("button");
+                        button.innerHTML = "Rent";
+                        button.id = i;
+
+                        button.addEventListener ("click", function() {
+                            console.log(String(result[this.id].id))
+                            returnItem(String(result[this.id].id));
+                        });
+                        cell = row.insertCell();
+                        cell.appendChild(button);
                 }
 
             } 
 
         }
-        else {
-                document.getElementById("ItemTable").innerHTML = 'No list items.';
-            } 
+        }
 }  
 
 
@@ -247,21 +274,19 @@ function itemLoaded(result, targetUrl) {
 
 
 
-function clearItemForm(kind) {
-    if(kind == 'Item'){
-        document.getElementById("weekly_price").value = '';
-        document.getElementById("title").value = '';
-        document.getElementById("monthly_price").value = '';
-        document.getElementById("daily_price").value = '';
-        document.getElementById("description").value = '';
-        document.getElementById("retail_price").value = '';
-    }
+function clearItemForm() {
+    document.getElementById("weekly_price").value = '';
+    document.getElementById("title").value = '';
+    document.getElementById("monthly_price").value = '';
+    document.getElementById("daily_price").value = '';
+    document.getElementById("description").value = '';
+    document.getElementById("retail_price").value = '';
 }
  
 function itemSaved(result) {
     if (result && result.ok) {
         console.log("Saved item.");
-        //clearItemForm(result.kind);
+        clearItemForm();
         loadItems('Item');
     } else {
         console.log("Received error: " + result.error);
@@ -294,6 +319,7 @@ function itemEdited(result) {
     if (result && result.ok) {
         console.log("Edited item.");
         loadItems('Item');
+        loadItems('RentedItem')
     } else {
         console.log("Received error: " + result.error);
         //showError(result.error);
@@ -303,8 +329,8 @@ function itemEdited(result) {
 function itemReturned(result) {
     if (result && result.ok) {
         console.log("Returned item.");
-        loadItems('Item');
         loadItems('RentedItem');
+        loadItems('RentedItem', true);
     } else {
         console.log("Received error: " + result.error);
         //showError(result.error);

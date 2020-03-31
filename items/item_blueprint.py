@@ -23,22 +23,22 @@ def login_required(test):
 def rent():
     if "logged_in" in session:
         return render_template('rent.html', username=session['username'], logout=True)
-
+   
     return render_template('rent.html', username="Not signed in", logout=False)
 
 
 @item_bp.route('/upload', methods=['GET', 'POST'])
 @login_required
 def upload():
-    return render_template('upload.html', username=session['username'])
+    return render_template('upload.html', username=session['username'], logout=True)
 
 
-@item_bp.route('/load-items/<kind>')
-def load_items(kind):
+@item_bp.route('/load-items/<kind>/<history>')
+def load_items(kind, history):
     # first we load the list items
     items.manage.log('loading list items.')
     print("Getting list of {} for {}".format(kind, session['username']))
-    item_list = items.manage.get_list_items(kind, session['username'])
+    item_list = items.manage.get_list_items(kind, session['username'], history)
     json_list = []
 
     # then we convert it into a normal list of dicts so that we can easily turn
@@ -49,6 +49,7 @@ def load_items(kind):
         json_list.append(d)
 
     responseJson = json.dumps(json_list)
+    print(responseJson)
     return Response(responseJson, mimetype='application/json')
 
 
@@ -92,7 +93,7 @@ def save_item(kind):
             else:
                 print("Saving rented item for {}".format(session['username']))
                 items.manage.create_list_item(Item(None, item_title, daily_price, weekly_price,
-                                              monthly_price, description, retail_price, kind, False, session['username']), kind)
+                                              monthly_price, description, retail_price, kind, False, session['username'], False), kind)
     except Exception as exc:
         items.manage.log(str(exc))
         json_result['error'] = 'The item was not saved.'
@@ -100,10 +101,10 @@ def save_item(kind):
     return Response(json.dumps(json_result), mimetype='application/json')
 
 
-@item_bp.route('/get-item/<itemid>')
-def get_item(itemid):
+@item_bp.route('/get-item/<itemid>/<kind>')
+def get_item(itemid, kind):
     items.manage.log('retrieving item for ID: %s' % itemid)
-    item = items.manage.get_list_item(itemid)
+    item = items.manage.get_list_item(itemid, kind)
     d = item.to_dict()
     d['id'] = itemid
     return Response(json.dumps(d), mimetype='application/json')
@@ -141,17 +142,17 @@ def change_item(kind):
     return Response(json.dumps(json_result), mimetype='application/json')
 
 
-@item_bp.route('/return-item/<kind>', methods=['POST'])
-def return_item(kind):
+@item_bp.route('/return-item/<itemid>/<kind>', methods=['POST'])
+def return_item(itemid, kind):
     # retrieve the parameters from the request
     item_id = request.form['id']
     json_result = {}
     try:
-        items.manage.log('returning item for ID: %s' % item_id)
-        items.manage.return_list_item(item_id, kind)
+        items.manage.log('editing item for ID: %s' % item_id)
+        items.manage.return_list_item(itemid, kind)
         json_result['ok'] = True
     except Exception as exc:
         items.manage.log(str(exc))
-        json_result['error'] = 'The item was returned.'
+        json_result['error'] = 'The item was edited.'
 
     return Response(json.dumps(json_result), mimetype='application/json')

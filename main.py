@@ -94,9 +94,11 @@ def login():
 @login_required
 @app.route('/logout')
 def logout():
-	session.pop('logged_in', None)
-	flash('you were just logged out')
-	return redirect(url_for('homepage'))
+    session['username'] = 'git ad'
+    session.pop('logged_in', None)
+    flash('you were just logged out')
+	
+    return redirect(url_for('homepage'))
 
 if __name__ == '__main__':
 	app.run(debug=True)

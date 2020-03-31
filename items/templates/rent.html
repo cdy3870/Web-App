@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="static/scripts/scripts.js?ver2.5"></script>
+    <script src="static/scripts/scripts.js?ver3.98"></script>
     <link rel="stylesheet" href="static\css\StyleSheet.css">
   </head>
   <body>
@@ -72,48 +72,27 @@
         <div class="container w100">
         <h3>Details</h3>
         <div class="container w100 vh30 scroll-y">
-          <p id="details">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ac odio non arcu tempus maximus. Sed consectetur lobortis sollicitudin. Aenean feugiat feugiat felis sed volutpat. Phasellus vehicula lacinia nisi. Aenean vitae erat interdum, interdum urna bibendum, mattis velit. Donec placerat rhoncus interdum. Nunc tristique non sapien ac dapibus. Suspendisse vestibulum gravida purus id tincidunt. Vivamus nec urna dolor. Praesent commodo tortor euismod hendrerit pharetra. Sed velit turpis, tristique sit amet consequat vitae, tincidunt sed purus. Proin varius auctor ornare. Phasellus luctus massa ac arcu elementum, eu vulputate ante varius. In molestie rhoncus magna, ullamcorper luctus nisi laoreet eu. Duis ante sapien, suscipit et pretium et, imperdiet nec enim. Phasellus volutpat lectus malesuada laoreet sagittis.</p>
-          <p id="retail_price">Retail Price: </p>
+          <p id="details">Select on view to look at the description and the retail price of the item.</p>
+          <p id="retail_price"></p>
           <div class="btn-group" id="buttongroup">
           </div>
         </div>
       </div>
 
       <div class="container w100">
-        <h3>Recently Rented</h3>
+        <h3>Rent History</h3>
         <div class="container w100 vh30 scroll-y">
           <table class="table table-dark">
             <thead>
               <tr>
-                <th scope="col">#</th>
                 <th scope="col">Item</th>
-                <th scope="col">Monthly Renting Price</th>
+                <th scope="col">Price</th>
                 <th scope="col">Rent Again</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Car</td>
-                <td>$100</td>
-                <td><button>Rent</button></td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Guitar</td>
-                <td>$10</td>
-                <td><button>Rent</button></td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Grand Piano</td>
-                <td>$200</td>
-                <td><button>Rent</button></td>
-              </tr>
-            </tbody>
+            <tbody id="RentHistoryTable"></tbody>
           </table>
         </div>
-        <button>Checkout</button>
       </div>
 
       <div class="container w100">
@@ -138,6 +117,7 @@
     <script>
         loadItems('Item');
         loadItems('RentedItem');
+        loadItems('RentedItem', true)
     </script>
 
   </body>
