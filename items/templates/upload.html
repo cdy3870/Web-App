@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="static\css\StyleSheet.css">
-    <script src="static/scripts/scripts.js?newversion17"></script>
+    <script src="static/scripts/scripts.js?newversion19"></script>
   </head>
   
   <body>
@@ -38,7 +38,7 @@
        <h1>Upload Items</h1>
       <br>
       
-      <form action="" method="post" onsubmit="saveItem('Item')">
+      <form action="" method="post" onsubmit="saveItem('Item')" id="form">
         <label for="fname"><b>Item Name</b>:</label>
         <input type="text" id="title" name="title" value="{{
           request.form.title }}"><br><br>
@@ -57,12 +57,20 @@
         <label for="fname"><b>Retail Price</b>:</label>
         <input type="text" id="retail_price" name="retail_price" value="{{ 
           request.form.retail_price }}"><br><br>
-        <label for="fname"><b>Location</b>:</label>
-        <input type="text" id="location" name="location" value="{{ 
-          request.form.location }}"><br><br>   
-        <label for="fname"><b>Category</b>:</label>
-        <input type="text" id="category" name="category" value="{{ 
-          request.form.category }}"><br><br>  
+        <label for="fname">Category:</label>
+            <select id="category" name="category" value="{{ request.form.category }}">
+                <option value="cars">Cars</option>
+                <option value="instruments">Instruments</option>
+                <option value="tools">Tools</option>
+                <option value="other">Other</option>
+            </select><br><br>
+        <label for="fname">Pittsburgh Location:</label>
+            <select id="location" name="location" value="{{request.form.location }}">
+                <option value="north_oakland">North Oakland</option>
+                <option value="south_oakland">South Oakland</option>
+                <option value="strip_district">Strip District</option>
+                <option value="mount_washington">Mount Washington</option>
+            </select><br><br>
         <div class="btn-group">
             <input class="btn btn-default" type="submit" value="Upload Photo">
             <input class="btn btn-default" type="submit" value="Upload">

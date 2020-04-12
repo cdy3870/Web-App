@@ -19,7 +19,7 @@ def login_required(test):
     return wrap
 
 
-@item_bp.route('/rent')
+@item_bp.route('/rent', methods=['GET', 'POST'])
 def rent():
     if "logged_in" in session:
         return render_template('rent.html', username=session['username'], logout=True)
@@ -36,8 +36,8 @@ def upload():
 @item_bp.route('/load-items/<kind>/<history>')
 def load_items(kind, history):
     # first we load the list items
-    items.manage.log('loading list items.')
-    print("Getting list of {} for {}".format(kind, session['username']))
+    #items.manage.log('loading list items.')
+    #print("Getting list of {} for {}".format(kind, session['username']))
     item_list = items.manage.get_list_items(kind, session['username'], history)
     json_list = []
 
@@ -49,11 +49,30 @@ def load_items(kind, history):
         json_list.append(d)
 
     responseJson = json.dumps(json_list)
-    print(responseJson)
+    
+
+    return Response(responseJson, mimetype='application/json')
+
+@item_bp.route('/query-items/<category>/<location>', methods=['GET', 'POST'])
+def query_items(category, location):
+    item_list = items.manage.get_list_items_query('Item', location, category)
+    json_list = []
+    
+    print("Queried Items: {}".format(item_list))
+
+    # then we convert it into a normal list of dicts so that we can easily turn
+    # it into JSON
+    for item in item_list:
+        d = item.to_dict()
+        d['id'] = str(item.id)
+        json_list.append(d) 
+    responseJson = json.dumps(json_list)
+    
     return Response(responseJson, mimetype='application/json')
 
 
-@item_bp.route('/save-item/<kind>', methods=['POST'])
+
+@item_bp.route('/save-item/<kind>', methods=['GET', 'POST'])
 def save_item(kind):
     title = None
     item_title = None
@@ -62,6 +81,8 @@ def save_item(kind):
     monthly_price = 0
     description = None
     retail_price = 0
+    category = None
+    location = None
 
     if 'title' in request.form:
         item_title = request.form['title']
@@ -75,6 +96,13 @@ def save_item(kind):
         description = request.form['description']
     if 'retail_price' in request.form:
         retail_price = request.form['retail_price']
+    if 'category' in request.form:
+        category = request.form['category']
+    if 'location' in request.form:
+        location = request.form['location']
+    
+    print(location)
+
     json_result = {}
 
     item_id = 0
@@ -89,7 +117,7 @@ def save_item(kind):
             items.manage.log('saving new list item')
             if kind == 'Item':
                 items.manage.create_list_item(Item(
-                    None, item_title, daily_price, weekly_price, monthly_price, description, retail_price, kind), kind)
+                    None, item_title, daily_price, weekly_price, monthly_price, description, retail_price, kind, category=category, location=location), kind)
             else:
                 print("Saving rented item for {}".format(session['username']))
                 items.manage.create_list_item(Item(None, item_title, daily_price, weekly_price,
@@ -156,3 +184,5 @@ def return_item(itemid, kind):
         json_result['error'] = 'The item was edited.'
 
     return Response(json.dumps(json_result), mimetype='application/json')
+
+    

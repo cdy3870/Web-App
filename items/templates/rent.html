@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="static/scripts/scripts.js?ver3.98"></script>
+    <script src="static/scripts/scripts.js?ver3.99996"></script>
     <link rel="stylesheet" href="static\css\StyleSheet.css">
   </head>
   <body>
@@ -48,12 +48,39 @@
             </div>
         </div>
     </div>-->
-
     <div class="grid-container grid-column-2 grid-row-2">
-
       <div class="container w100">
         <h3>Item List</h3>
+
+        
+        <form action="" method="post" id="form2">
+            <label for="fname">Pittsburgh Location:</label>     
+                <select id="location2" name="location2" value="{{ request.form.location2 }}">
+                    <option value="all">All</option>
+                    <option value="north_oakland">North Oakland</option>
+                    <option value="south_oakland">South Oakland</option>
+                    <option value="strip_district">Strip District</option>
+                    <option value="mount_washington">Mount Washington</option>
+                </select>
+            <label for="fname">Category:</label>
+                <select id="category2" name="category2" value="{{ request.form.category2 }}">
+                    <option value="all">All</option>
+                    <option value="cars">Cars</option>
+                    <option value="instruments">Instruments</option>
+                    <option value="tools">Tools</option>
+                    <option value="other">Other</option>
+                </select>
+                <select id="dailyprice2" name="dailyprice2" value="{{ request.form.dailyprice2 }}">
+                    <option value="$0-$10">$0-$10</option>
+                    <option value="$10-$50">$10-$50</option>
+                    <option value="$50-$200">$50-$200</option>
+                    <option value=">$200">$200</option>
+                </select>
+        </form>
+        <button onclick="queryItems()">Search</button>
+        
         <div class="container w100 vh30 scroll-y">
+            
           <table class="table table-dark">
           <thead>
               <tr>

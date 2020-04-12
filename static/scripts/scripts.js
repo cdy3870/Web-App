@@ -4,6 +4,8 @@ function saveItem(kind, result=undefined, price=undefined) {
     console.log(kind);
     if (kind == 'Item') {
         console.log("item saved");
+        params['location'] = document.getElementById("location").value;
+        params['category'] = document.getElementById("category").value;
         params['retail_price'] = document.getElementById("retail_price").value;
         params['description'] = document.getElementById("description").value;
         params['monthly_price'] = document.getElementById("monthly_price").value;
@@ -50,6 +52,12 @@ function returnItem(id){
     let params = {"id": id};
     console.log("returning item")
     sendJsonRequest(params, '/return-item/' + id + '/RentedItem', itemReturned);
+}
+
+function queryItems(){
+    let category = document.getElementById("category2").value;
+    let location = document.getElementById("location2").value;  
+    getData('/query-items/' + category + '/' + location, displayList)
 }
 
 //Creating XmlHTTP
@@ -142,8 +150,8 @@ function objectToParameters(obj) {
 
 //Loading Items Helper Methods
 function displayList(result, targetUrl) {
+    console.log(result);
         if (result && result.length) {
-            console.log(result);
             if (result[0].kind == 'Item'){
                 console.log("Items loaded");
                 document.getElementById("ItemTable").innerHTML = '';
@@ -176,7 +184,6 @@ function displayList(result, targetUrl) {
 
             }
             else{
-                console.log("the kind is rented");
                 if (result[0].past_rented == false){
                     document.getElementById("RentedTable").innerHTML = '';
                     console.log("Rented items loaded");
@@ -232,6 +239,9 @@ function displayList(result, targetUrl) {
             } 
 
         }
+        }
+        else{
+            document.getElementById("ItemTable").innerHTML = 'No Items';
         }
 }  
 
