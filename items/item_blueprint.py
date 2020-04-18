@@ -35,11 +35,15 @@ def upload():
 
 @item_bp.route('/load-items/<kind>/<history>')
 def load_items(kind, history):
+    print(history)
     # first we load the list items
     #items.manage.log('loading list items.')
     #print("Getting list of {} for {}".format(kind, session['username']))
     item_list = items.manage.get_list_items(kind, session['username'], history)
     json_list = []
+
+    print("item list")
+    print(item_list)
 
     # then we convert it into a normal list of dicts so that we can easily turn
     # it into JSON
@@ -50,6 +54,8 @@ def load_items(kind, history):
 
     responseJson = json.dumps(json_list)
     
+    print("respnse")
+    print(responseJson)
 
     return Response(responseJson, mimetype='application/json')
 
@@ -57,9 +63,6 @@ def load_items(kind, history):
 def query_items(category, location, daily_price_range):
     item_list = items.manage.get_list_items_query('Item', location, category, daily_price_range)
     json_list = []
-    
-    print("Queried Items: {}".format(item_list))
-
     # then we convert it into a normal list of dicts so that we can easily turn
     # it into JSON
     for item in item_list:
@@ -67,8 +70,6 @@ def query_items(category, location, daily_price_range):
         d['id'] = str(item.id)
         json_list.append(d) 
     responseJson = json.dumps(json_list)
-
-    print(responseJson)
     
     return Response(responseJson, mimetype='application/json')
 
@@ -104,12 +105,11 @@ def save_item(kind):
     if 'location' in request.form:
         location = request.form['location']
     if 'file' in request.files:
-        print(request.files['file'].filename)
         uploaded_photo = request.files['file']
+
     json_result = {}
 
     item_id = 0
-    print("here")
     try:
         if item_id:
             item = Item(item_id, title, daily_price, weekly_price,
@@ -122,12 +122,13 @@ def save_item(kind):
                 blob_url = items.manage.create_image_blob(uploaded_photo, uploaded_photo.filename)
                 
                 items.manage.create_list_item(Item(
-                    None, item_title, daily_price, weekly_price, monthly_price, description, retail_price, kind, category=category, location=location, blob_url=blob_url), kind)
+                    None, item_title, daily_price, weekly_price, monthly_price, description, retail_price, kind, renter=session['username'], 
+                    category=category, location=location, blob_url=blob_url), kind)
                 
             else:
                 print("Saving rented item for {}".format(session['username']))
                 items.manage.create_list_item(Item(None, item_title, daily_price, weekly_price,
-                                              monthly_price, description, retail_price, kind, False, session['username'], False), kind)
+                                              monthly_price, description, retail_price, kind, False, session['username'], past_rented=False), kind)
     except Exception as exc:
         items.manage.log(str(exc))
         json_result['error'] = 'The item was not saved.'

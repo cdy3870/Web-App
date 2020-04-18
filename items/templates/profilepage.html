@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Theme Made By www.w3schools.com - No Copyright -->
+    <title>Upload</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static\css\StyleSheet.css">
+    <script src="static/scripts/scripts.js?newversion1999995"></script>
+  </head>
+  
+  <body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <div class="float-left">
+        <!-- stuff on the left -->
+        <a href="/">Home</a>
+        <a href="/rent">Rent</a>
+        <a href="/upload">Upload</a>
+      </div>
+      <div class="float-right">
+        <!-- stuff on the right -->
+        <a href="#user" id="user">{{username}}</a>
+        {%- if logout -%}
+        <a href="/logout">Log Out</a>
+        {%- endif %}
+      </div>
+    </nav>
+    <!-- Navbar -->
+
+    <h3 id="prof_username"></h3>
+
+  </body>

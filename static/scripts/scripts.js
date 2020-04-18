@@ -180,7 +180,17 @@ function displayList(result, targetUrl) {
                 for (var i = 0; i < result.length; i++) {
                     let row = table.insertRow();           
                     let cell = row.insertCell();
-                    let text = document.createTextNode(result[i].title)
+                    let text = document.createElement('a');
+                    text.addEventListener ("click", function() {
+                        console.log("test");
+                        loadUserData("test");
+                    });
+                    text.href = "/profilepage"
+                    let linkText = document.createTextNode(result[i].renter);
+                    text.appendChild(linkText);
+                    cell.appendChild(text);
+                    cell = row.insertCell();
+                    text = document.createTextNode(result[i].title)
                     cell.appendChild(text);
                     cell = row.insertCell();
                     text = document.createTextNode("$" + result[i].daily_price)
@@ -262,7 +272,9 @@ function displayList(result, targetUrl) {
         }
         }
         else{
-            document.getElementById("ItemTable").innerHTML = 'No Items';
+            if(result[0].kind == 'Item'){
+                document.getElementById("ItemTable").innerHTML = 'No Items';
+            }
         }
 }  
 
@@ -392,5 +404,10 @@ function addRentedItem(result, price){
     //deleteItem(String(result.id), result.kind);
     saveItem('RentedItem', result, price)
     changeItem(String(result.id), result.kind)
+}
+
+function loadUserData(username){
+    let prof_username = document.getElementById("prof_username");
+    prof_username.innerHTML = username;
 }
 

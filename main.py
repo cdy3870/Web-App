@@ -92,6 +92,11 @@ def login():
     return render_template('login.html', error=error)
 
 @login_required
+@app.route('/profilepage')
+def profilepage():
+	return render_template('profilepage.html')
+
+@login_required
 @app.route('/logout')
 def logout():
     session['username'] = 'git ad'

@@ -22,7 +22,7 @@ def convert_to_object(entity):
     item_id = entity.key.id_or_name
     
     return Item(item_id, entity['title'], entity['daily_price'], entity['weekly_price'], entity['monthly_price'], entity['description'], 
-                entity['retail_price'], entity['kind'], entity['rented'], entity['rentee'], entity['past_rented'], entity['category'], entity['location'],
+                entity['retail_price'], entity['kind'], entity['rented'], entity['rentee'], entity['renter'], entity['past_rented'], entity['category'], entity['location'],
                 entity['blob_url'])
 
 def load_entity(client, item_id):
@@ -41,7 +41,6 @@ def load_entity_kind(client, item_id, kind):
 
 def get_list_items(kind, username, history):
     """Retrieve the list items we've already stored."""
-    print(history)
     client = get_client()
     # we build a query
     query = client.query(kind=kind)
@@ -64,6 +63,8 @@ def get_list_items(kind, username, history):
         #query.add_filter('rentee', '<', username)
     # we execute the query
     items = list(query.fetch())
+    print("item query")
+    print(items)
     
 
     # the code below converts the datastore entities to plain old objects -
@@ -137,6 +138,7 @@ def create_list_item(item, kind):
     entity['kind'] = item.kind
     entity['rented'] = item.rented
     entity['rentee'] = item.rentee
+    entity['renter'] = item.renter
     entity['past_rented'] = item.past_rented
     entity['category'] = item.category
     entity['location'] = item.location
