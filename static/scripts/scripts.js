@@ -121,7 +121,7 @@ function getAJAX(url, callback) {
                 } catch (e) {
                     console.log("[AJAX]: JSON parse failed! ResponseText:" + xmlHttp.responseText);
                 }
-                //if (obj !== null) callback(obj);
+                if (obj !== null) callback(obj);
             }
         }
     }
@@ -272,8 +272,17 @@ function displayList(result, targetUrl) {
         }
         }
         else{
-            if(result[0].kind == 'Item'){
+            if(targetUrl == "/load-items/RentedItem/true"){
+                document.getElementById("RentHistoryTable").innerHTML = 'No Renting History';
+            }
+            else if(targetUrl == "/load-items/RentedItem/false"){
+                document.getElementById("RentedTable").innerHTML = 'No Rented Items';
+            }
+            else if(targetUrl == "/load-items/Item/false"){
                 document.getElementById("ItemTable").innerHTML = 'No Items';
+            }
+            else{
+                document.getElementById("ItemTable").innerHTML = 'No Matches Found';
             }
         }
 }  
