@@ -4,15 +4,34 @@ function saveItem(kind, result=undefined, price=undefined) {
     console.log(kind);
     if (kind == 'Item') {
         console.log("item saved");
-        params['location'] = document.getElementById("location").value;
+        /*params['location'] = document.getElementById("location").value;
         params['category'] = document.getElementById("category").value;
         params['retail_price'] = document.getElementById("retail_price").value;
         params['description'] = document.getElementById("description").value;
         params['monthly_price'] = document.getElementById("monthly_price").value;
         params['daily_price'] = document.getElementById("daily_price").value;
         params['weekly_price'] = document.getElementById("weekly_price").value;
-        params['title'] = document.getElementById("title").value; 
-        sendJsonRequest(params, '/save-item/' + kind, itemSaved);
+        params['title'] = document.getElementById("title").value;*/
+        var form = document.getElementById('form');
+        var fileInput = document.getElementById('the-file');
+        var file = fileInput.files[0];
+        console.log(file)
+        var formData = new FormData(form);
+        formData.append('file', file);
+        formData.append('test', 'test');
+        formData.append('location', document.getElementById("location").value);
+        formData.append('category', document.getElementById("category").value);
+        formData.append('retail_price', document.getElementById("retail_price").value);
+        formData.append('description', document.getElementById("description").value);
+        formData.append('monthly_price', document.getElementById("monthly_price").value);
+        formData.append('daily_price', document.getElementById("daily_price").value);
+        formData.append('weekly_price', document.getElementById("weekly_price").value);
+        formData.append('title', document.getElementById("title").value);
+
+        //sendJsonRequest(formData, '/save-item/' + kind, itemSaved);
+        var oReq = new XMLHttpRequest();
+        oReq.open("POST", '/save-item/' + kind, true);
+        oReq.send(formData);
     } 
     else {
         console.log("rented item saved");
@@ -55,9 +74,10 @@ function returnItem(id){
 }
 
 function queryItems(){
+    let daily_price2 = document.getElementById("dailyprice2").value;
     let category = document.getElementById("category2").value;
     let location = document.getElementById("location2").value;  
-    getData('/query-items/' + category + '/' + location, displayList)
+    getData('/query-items/' + category + '/' + location + '/' + daily_price2, displayList)
 }
 
 //Creating XmlHTTP
@@ -97,11 +117,11 @@ function getAJAX(url, callback) {
                 var obj = null;
                 try {
                     obj = JSON.parse(xmlHttp.responseText);
-                    callback(obj, targetUrl);
+                    callback(obj, url);
                 } catch (e) {
                     console.log("[AJAX]: JSON parse failed! ResponseText:" + xmlHttp.responseText);
                 }
-                if (obj !== null) callback(obj);
+                //if (obj !== null) callback(obj);
             }
         }
     }
@@ -151,6 +171,7 @@ function objectToParameters(obj) {
 //Loading Items Helper Methods
 function displayList(result, targetUrl) {
     console.log(result);
+    console.log(result.length)
         if (result && result.length) {
             if (result[0].kind == 'Item'){
                 console.log("Items loaded");
@@ -261,6 +282,8 @@ function itemLoaded(result, targetUrl) {
     weeklyButton.innerHTML = "Weekly Rent";
     var monthlyButton = document.createElement("button");
     monthlyButton.innerHTML = "Monthly Rent";
+
+    document.getElementById("image").src = result.blob_url;
 
     
     

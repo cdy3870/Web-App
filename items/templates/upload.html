@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="static\css\StyleSheet.css">
-    <script src="static/scripts/scripts.js?newversion19"></script>
+    <script src="static/scripts/scripts.js?newversion1999992"></script>
   </head>
   
   <body>
@@ -38,7 +38,7 @@
        <h1>Upload Items</h1>
       <br>
       
-      <form action="" method="post" onsubmit="saveItem('Item')" id="form">
+    <form action="" method="post" onsubmit="saveItem('Item')" id="form" enctype="multipart/form-data">
         <label for="fname"><b>Item Name</b>:</label>
         <input type="text" id="title" name="title" value="{{
           request.form.title }}"><br><br>
@@ -71,11 +71,14 @@
                 <option value="strip_district">Strip District</option>
                 <option value="mount_washington">Mount Washington</option>
             </select><br><br>
-        <div class="btn-group">
-            <input class="btn btn-default" type="submit" value="Upload Photo">
-            <input class="btn btn-default" type="submit" value="Upload">
-        </div>
+
+        <label for="fname">Upload Photo:</label>
+        <input id="the-file" type="file" name="file">
+        <br><br>
+        <input class="btn btn-default" type="submit" value="Upload">
       </form>
+        
+
 
     </div>
 

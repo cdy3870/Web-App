@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="static/scripts/scripts.js?ver3.99996"></script>
+    <script src="static/scripts/scripts.js?ver3.999997"></script>
     <link rel="stylesheet" href="static\css\StyleSheet.css">
   </head>
   <body>
@@ -70,7 +70,9 @@
                     <option value="tools">Tools</option>
                     <option value="other">Other</option>
                 </select>
+            <label for="fname">Daily Price Range:</label>
                 <select id="dailyprice2" name="dailyprice2" value="{{ request.form.dailyprice2 }}">
+                    <option value="any">Any</option>
                     <option value="$0-$10">$0-$10</option>
                     <option value="$10-$50">$10-$50</option>
                     <option value="$50-$200">$50-$200</option>
@@ -101,6 +103,7 @@
         <div class="container w100 vh30 scroll-y">
           <p id="details">Select on view to look at the description and the retail price of the item.</p>
           <p id="retail_price"></p>
+          <img id="image" width="200" height="200" src="/static/images/pitt.png">
           <div class="btn-group" id="buttongroup">
           </div>
         </div>
@@ -142,7 +145,7 @@
     </div>
 
     <script>
-        loadItems('Item');
+        queryItems();
         loadItems('RentedItem');
         loadItems('RentedItem', true)
     </script>

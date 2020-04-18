@@ -1,4 +1,4 @@
-from google.cloud import datastore
+from google.cloud import datastore, storage
 from items.item import Item
 
 IT_ENTITY_TYPE = 'Item'
@@ -22,7 +22,8 @@ def convert_to_object(entity):
     item_id = entity.key.id_or_name
     
     return Item(item_id, entity['title'], entity['daily_price'], entity['weekly_price'], entity['monthly_price'], entity['description'], 
-                entity['retail_price'], entity['kind'], entity['rented'], entity['rentee'], entity['past_rented'], entity['category'], entity['location'])
+                entity['retail_price'], entity['kind'], entity['rented'], entity['rentee'], entity['past_rented'], entity['category'], entity['location'],
+                entity['blob_url'])
 
 def load_entity(client, item_id):
     """Load a datstore entity using a particular client, and the ID."""
@@ -74,11 +75,12 @@ def get_list_items(kind, username, history):
     #log('list retrieved. %s items' % len(result))
     return result
 
-def get_list_items_query(kind, location, category):
+def get_list_items_query(kind, location, category, daily_price_range):
     """Retrieve the list items we've already stored."""
     client = get_client()
     query = client.query(kind=kind)
     query.add_filter('rented', '=', False)
+
     if kind == 'Item':
         if location != 'all' and category != 'all':
             query.add_filter('location', '=', location)
@@ -87,6 +89,22 @@ def get_list_items_query(kind, location, category):
             query.add_filter('location', '=', location)
         elif location == 'all' and category != 'all':
             query.add_filter('category', '=', category)
+        
+        
+        if daily_price_range != 'any':
+            #print(daily_price_range)
+            if daily_price_range == '$0-$10':
+                query.add_filter('daily_price', '>', 0)
+                query.add_filter('daily_price', '<=', 10) 
+            elif daily_price_range == '$10-50':
+                query.add_filter('daily_price', '>', 10)
+                query.add_filter('daily_price', '<=', 50) 
+            elif daily_price_range == '$50-$200':
+                query.add_filter('daily_price', '>', 50)
+                query.add_filter('daily_price', '<=', 200) 
+            else:
+                query.add_filter('daily_price', '>', 200)
+                
             
         #print("loading list")
 
@@ -111,9 +129,9 @@ def create_list_item(item, kind):
     entity = datastore.Entity(key)
     #entity['renter'] = item.renter
     entity['title'] = item.title
-    entity['daily_price'] = item.daily_price
-    entity['weekly_price'] = item.weekly_price
-    entity['monthly_price'] = item.monthly_price
+    entity['daily_price'] = int(item.daily_price)
+    entity['weekly_price'] = int(item.weekly_price)
+    entity['monthly_price'] = int(item.monthly_price)
     entity['description'] = item.description
     entity['retail_price'] = item.retail_price
     entity['kind'] = item.kind
@@ -122,6 +140,8 @@ def create_list_item(item, kind):
     entity['past_rented'] = item.past_rented
     entity['category'] = item.category
     entity['location'] = item.location
+    entity['blob_url'] = item.blob_url
+    print('putting entity')
     client.put(entity)
     log('saved new entity for ID: %s' % key.id_or_name)
 
@@ -168,3 +188,15 @@ def return_list_item(item_id, kind):
     print(entity)
     client.put(entity)
     log('key deleted for ID: %s' % item_id)
+
+def get_client_storage():
+    return storage.Client()
+
+def create_image_blob(uploaded_file, filename):
+    print("creating image blob for: {}".format(filename))
+    client = get_client_storage()
+    bucket = client.get_bucket('image_bucket_1520')
+    file_blob = bucket.blob(filename)
+    file_blob.upload_from_string(uploaded_file.read(), content_type=uploaded_file.content_type)
+    
+    return file_blob.public_url
