@@ -46,10 +46,14 @@
 }
 
 .container {
-  display: inline-block;
+    display: inline-block;
 	width: auto;
 	padding: 10px 15px;
 	margin: auto;
+}
+
+.inline {
+	display: inline-block;
 }
 
 .w50 {
