@@ -439,6 +439,9 @@ function addRentedItem(result, price){
     saveItem('RentedItem', result, price)
     changeItem(String(result.id), result.kind)
     hideElement(document.getElementById('buttongroup'));
+    document.getElementById('details').innerHTML = "Select on view to look at the description and the retail price of the item.";
+    document.getElementById('retail_price').innerHTML = "";
+    document.getElementById("image").src = "/static/images/pitt.png";
 }
 
 function loadUserData(username){
