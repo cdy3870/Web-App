@@ -53,33 +53,33 @@
         <h3>Item List</h3>
 
         
-        <form action="" method="post" id="form2">
+        <form action="#" method="post" id="form2">
             <label for="fname">Pittsburgh Location:</label>     
-                <select id="location2" name="location2" value="{{ request.form.location2 }}">
-                    <option value="all">All</option>
-                    <option value="north_oakland">North Oakland</option>
-                    <option value="south_oakland">South Oakland</option>
-                    <option value="strip_district">Strip District</option>
-                    <option value="mount_washington">Mount Washington</option>
-                </select>
+            <select id="location2" name="location2" value="{{ request.form.location2 }}">
+                <option value="all">All</option>
+                <option value="north_oakland">North Oakland</option>
+                <option value="south_oakland">South Oakland</option>
+                <option value="strip_district">Strip District</option>
+                <option value="mount_washington">Mount Washington</option>
+            </select>
             <label for="fname">Category:</label>
-                <select id="category2" name="category2" value="{{ request.form.category2 }}">
-                    <option value="all">All</option>
-                    <option value="cars">Cars</option>
-                    <option value="instruments">Instruments</option>
-                    <option value="tools">Tools</option>
-                    <option value="other">Other</option>
-                </select>
+            <select id="category2" name="category2" value="{{ request.form.category2 }}">
+                <option value="all">All</option>
+                <option value="cars">Cars</option>
+                <option value="instruments">Instruments</option>
+                <option value="tools">Tools</option>
+                <option value="other">Other</option>
+            </select>
             <label for="fname">Daily Price Range:</label>
-                <select id="dailyprice2" name="dailyprice2" value="{{ request.form.dailyprice2 }}">
-                    <option value="any">Any</option>
-                    <option value="$0-$10">$0-$10</option>
-                    <option value="$10-$50">$10-$50</option>
-                    <option value="$50-$200">$50-$200</option>
-                    <option value=">$200">$200</option>
-                </select>
+            <select id="dailyprice2" name="dailyprice2" value="{{ request.form.dailyprice2 }}">
+                <option value="any">Any</option>
+                <option value="$0-$10">$0-$10</option>
+                <option value="$10-$50">$10-$50</option>
+                <option value="$50-$200">$50-$200</option>
+                <option value=">$200">$200</option>
+            </select>
+            <button onclick="queryItems()">Search</button>
         </form>
-        <button onclick="queryItems()">Search</button>
         
         <div class="container w100 vh30 scroll-y">
             
