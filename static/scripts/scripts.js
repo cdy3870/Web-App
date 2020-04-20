@@ -1,32 +1,33 @@
 // check is the upload form filled
-function submitUploadForm() {
+function submitUploadForm(event) {
+    event.preventDefault();
     let form = document.forms["uploadItem"];
     let formElements = form.elements;
-    if (formElements["title"].value = "") {
+    if (formElements["title"].value == "") {
         alert("Please input item name");
         return false;
-    } else if (formElements["daily_price"].value = "") {
+    } else if (formElements["daily_price"].value == "") {
         alert("Please input daily price");
         return false;
     } else if (formElements["daily_price"].value <= 0) {
         alert("Please input valid daily price");
         return false;
-    } else if (formElements["weekly_price"].value = "") {
+    } else if (formElements["weekly_price"].value == "") {
         alert("Please input weekly price");
         return false;
     } else if (formElements["weekly_price"].value <= 0) {
         alert("Please input valid weekly price");
         return false;
-    } else if (formElements["monthly_price"].value = "") {
+    } else if (formElements["monthly_price"].value == "") {
         alert("Please input monthly price");
         return false;
     } else if (formElements["monthly_price"].value <= 0) {
         alert("Please input valid monthly price");
         return false;
-    } else if (formElements["description"].value = "") {
+    } else if (formElements["description"].value == "") {
         alert("Please input description");
         return false;
-    } else if (formElements["retail_price"].value = "") {
+    } else if (formElements["retail_price"].value == "") {
         alert("Please input retail price");
         return false;
     } else if (formElements["retail_price"].value <= 0) {
@@ -36,7 +37,6 @@ function submitUploadForm() {
         alert("Please upload a photo for the item");
         return false;
     }
-
     saveItem('Item');
     return true;
 }
