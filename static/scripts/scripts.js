@@ -155,26 +155,24 @@ function getAJAX(url, callback) {
     var xmlHttp = createXmlHttp();
     xmlHttp.open("GET", url, true); // async
     xmlHttp.onreadystatechange = function () {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-            console.log("[AJAX]: HTTP GET request success. url: " + url);
-            if (callback) {
-                var obj = null;
-                try {
-                    console.log("arrived 1.75");
-                    obj = JSON.parse(xmlHttp.responseText);
-                    callback(obj, url);
-                } catch (e) {
-                    console.log("[AJAX]: JSON parse failed! ResponseText:" + xmlHttp.responseText);
+        if (xmlHttp.readyState == 4) {
+            if (xmlHttp.status == 200) {
+                console.log("[AJAX]: HTTP GET request success. url: " + url);
+                if (callback) {
+                    var obj = null;
+                    try {
+                        obj = JSON.parse(xmlHttp.responseText);
+                    } catch (e) {
+                        console.log("[AJAX]: JSON parse failed! ResponseText:" + xmlHttp.responseText);
+                    }
+                    if (obj !== null) callback(obj);
                 }
-                if (obj !== null) callback(obj);
+            } else {
+                console.log("[AJAX]: HTTP GET request failed! url: " + url);
             }
         }
     }
-    try {
-        xmlHttp.send();
-    } catch (e) {
-        console.log("[AJAX]: HTTP GET request failed! url: " + url);
-    }
+    xmlHttp.send();
 }
 
 // AJAX post request
@@ -183,24 +181,24 @@ function postAJAX(url, callback, data) {
     xmlHttp.open("POST", url, true); // async
     xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlHttp.onreadystatechange = function () {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-            console.log("[AJAX]: HTTP POST request success. url: " + url);
-            if (callback) {
-                var obj = null;
-                try {
-                    obj = JSON.parse(xmlHttp.responseText);
-                } catch (e) {
-                    console.log("[AJAX]: JSON parse failed! ResponseText:" + xmlHttp.responseText);
+        if (xmlHttp.readyState == 4) {
+            if (xmlHttp.status == 200) {
+                console.log("[AJAX]: HTTP POST request success. url: " + url);
+                if (callback) {
+                    var obj = null;
+                    try {
+                        obj = JSON.parse(xmlHttp.responseText);
+                    } catch (e) {
+                        console.log("[AJAX]: JSON parse failed! ResponseText:" + xmlHttp.responseText);
+                    }
+                    if (obj !== null) callback(obj);
                 }
-                if (obj !== null) callback(obj);
+            } else {
+                console.log("[AJAX]: HTTP POST request failed! url: " + url);
             }
         }
     }
-    try {
-        xmlHttp.send(data);
-    } catch (e) {
-        console.log("[AJAX]: HTTP POST request failed! url: " + url);
-    }
+    xmlHttp.send(data);
 }
 
 
@@ -336,41 +334,22 @@ function displayList(result, targetUrl) {
 
 
 
-function itemLoaded(result, targetUrl) {
+function itemLoaded(result) {
     console.log(result);
-    document.getElementById('buttongroup').innerHTML = '';
-    let text = '';
-    //console.log(result.description);
+    showElement(document.getElementById('buttongroup'));
+
     document.getElementById('details').innerHTML = result.description;
-    document.getElementById('retail_price').innerHTML = "Retail Price: $" + result.retail_price;           
-    //
-    var dailyButton = document.createElement("button");
-    dailyButton.innerHTML = "Daily Rent";
-    var weeklyButton = document.createElement("button");
-    weeklyButton.innerHTML = "Weekly Rent";
-    var monthlyButton = document.createElement("button");
-    monthlyButton.innerHTML = "Monthly Rent";
+    document.getElementById('retail_price').innerHTML = "Retail Price: $" + result.retail_price;
+
+    var dailyButton = document.getElementById("DailyRentButton");
+    var weeklyButton = document.getElementById("WeeklyRentButton");
+    var monthlyButton = document.getElementById("MonthlyRentButton");
 
     document.getElementById("image").src = result.blob_url;
 
-    
-    
-    dailyButton.addEventListener ("click", function() {
-        addRentedItem(result, result.daily_price);
-    });
-    weeklyButton.addEventListener ("click", function() {
-        addRentedItem(result, result.weekly_price);
-    });
-    monthlyButton.addEventListener ("click", function() {
-        addRentedItem(result, result.monthly_price);
-    });
-
-    document.getElementById("buttongroup").append(dailyButton);
-    document.getElementById("buttongroup").append(weeklyButton);
-    document.getElementById("buttongroup").append(monthlyButton);
-
-
-
+    dailyButton.onclick = addRentedItem.bind(dailyButton, result, result.daily_price);
+    weeklyButton.onclick = addRentedItem.bind(dailyButton, result, result.weekly_price);
+    monthlyButton.onclick = addRentedItem.bind(dailyButton, result, result.monthly_price);
 }
 
 
@@ -459,6 +438,7 @@ function addRentedItem(result, price){
     //deleteItem(String(result.id), result.kind);
     saveItem('RentedItem', result, price)
     changeItem(String(result.id), result.kind)
+    hideElement(document.getElementById('buttongroup'));
 }
 
 function loadUserData(username){
@@ -500,3 +480,16 @@ function displayUserData(result, targetUrl) {
         }
 }
 
+
+
+function hideElement(element) {
+    if (!element instanceof Element) return;
+    if (element.className.indexOf("hidden") < 0) {
+        element.className = element.className+" hidden";
+    }
+}
+
+function showElement(element) {
+    if (!element instanceof Element) return;
+    element.className = element.className.replace(" hidden","");
+}

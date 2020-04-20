@@ -56,6 +56,10 @@
 	display: inline-block;
 }
 
+.hidden{
+	display: none;
+}
+
 .w50 {
     width: 50%;
 }
