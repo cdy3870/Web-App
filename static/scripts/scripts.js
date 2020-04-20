@@ -70,10 +70,10 @@ function saveItem(kind, result=undefined, price=undefined) {
         formData.append('weekly_price', document.getElementById("weekly_price").value);
         formData.append('title', document.getElementById("title").value);
 
-        //sendJsonRequest(formData, '/save-item/' + kind, itemSaved);
-        var oReq = new XMLHttpRequest();
-        oReq.open("POST", '/save-item/' + kind, true);
-        oReq.send(formData);
+        sendJsonRequest(formData, '/save-item/' + kind, itemSaved);
+        //var oReq = new XMLHttpRequest();
+        //oReq.open("POST", '/save-item/' + kind, true);
+        //oReq.send(formData);
     } 
     else {
         console.log("rented item saved");
@@ -385,14 +385,13 @@ function clearItemForm() {
 }
  
 function itemSaved(result) {
-    if (result && result.ok) {
-        console.log("Saved item.");
-        clearItemForm();
-        loadItems('Item');
-    } else {
-        console.log("Received error: " + result.error);
-        //showError(result.error);
+    if (result.error) {
+        console.log("Upload failed. Received error: " + result.error);
+        alert("Upload failed. Received error: " + result.error);
+        return;
     }
+    console.log("Item uploaded.");
+    alert("Upload success.");
 }
 
 function rentedItemSaved(result) {
