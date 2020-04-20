@@ -53,11 +53,11 @@
 }
 
 .inline {
-	display: inline-block;
+	display: inline-block!important;
 }
 
 .hidden{
-	display: none;
+	display: none!important;
 }
 
 .w50 {
