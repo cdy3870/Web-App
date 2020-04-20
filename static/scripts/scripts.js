@@ -1,6 +1,6 @@
 // check is the upload form filled
-function submitUploadForm(event) {
-    event.preventDefault();
+function submitUploadForm() {
+    this.event.preventDefault();
     let form = document.forms["uploadItem"];
     let formElements = form.elements;
     if (formElements["title"].value == "") {
