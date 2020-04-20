@@ -71,10 +71,11 @@ function saveItem(kind, result=undefined, price=undefined) {
         formData.append('weekly_price', document.getElementById("weekly_price").value);
         formData.append('title', document.getElementById("title").value);
 
-        sendJsonRequest(formData, '/save-item/' + kind, itemSaved);
+        //sendJsonRequest(formData, '/save-item/' + kind, itemSaved);
         //var oReq = new XMLHttpRequest();
         //oReq.open("POST", '/save-item/' + kind, true);
         //oReq.send(formData);
+        postAJAX('/save-item/' + kind, itemSaved, formData);
     } 
     else {
         console.log("rented item saved");
