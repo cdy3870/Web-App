@@ -50,10 +50,10 @@ def get_list_items(kind, username, history):
         #query.add_filter('renter', '<', username)
         #print("loading list")
         items = list(query.fetch())
-        for item in items:
-            if item["renter"] == username:
-                print("true")
-                items.remove(item)
+        if len(items) > 1:
+            for item in items:
+                if item["renter"] == username:
+                    items = items.remove(item)
     if kind == 'RentedItem':
         query.add_filter('rentee', '=', username)
         if history == 'true':
@@ -71,6 +71,7 @@ def get_list_items(kind, username, history):
     # we execute the query
     print("item print")
     print(items)
+   
 
     # the code below converts the datastore entities to plain old objects -
     # this is good for decoupling the rest of our app from datastore.
@@ -134,6 +135,7 @@ def get_list_items_query(kind, location, category, daily_price_range):
                 
             
         #print("loading list")
+    print("querying items")
 
     items = list(query.fetch())
 
