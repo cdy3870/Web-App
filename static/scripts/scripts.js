@@ -118,6 +118,7 @@ function returnItem(id){
 }
 
 function queryItems(){
+    this.event.preventDefault();
     let daily_price2 = document.getElementById("dailyprice2").value;
     let category = document.getElementById("category2").value;
     let location = document.getElementById("location2").value;  

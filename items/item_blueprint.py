@@ -67,6 +67,7 @@ def query_items(category, location, daily_price_range):
         d['id'] = str(item.id)
         json_list.append(d) 
     responseJson = json.dumps(json_list)
+    print(responseJson)
     
     return Response(responseJson, mimetype='application/json')
 

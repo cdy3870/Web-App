@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="static/scripts/scripts.js?version1.000020"></script>
+    <script src="static/scripts/scripts.js?version1.000021"></script>
     <link rel="stylesheet" href="static\css\StyleSheet.css">
   </head>
   <body>
@@ -53,7 +53,7 @@
         <h3>Item List</h3>
 
         
-        <form action="#" method="post" id="form2">
+        <form action="#" method="post" id="form2" onsubmit="queryItems()">
             <label for="fname">Pittsburgh Location:</label>     
             <select id="location2" name="location2" value="{{ request.form.location2 }}">
                 <option value="all">All</option>
@@ -78,7 +78,7 @@
                 <option value="$50-$200">$50-$200</option>
                 <option value=">$200">$200</option>
             </select>
-            <button type="button" onclick="queryItems()">Search</button>
+            <input class="btn btn-default" type="submit" value="Search">
         </form>
         
         <div class="container w100 vh30 scroll-y">
