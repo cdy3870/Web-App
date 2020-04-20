@@ -20,7 +20,7 @@ def load_key(client, kind, item_id=None):
 
 def convert_to_object(entity):
     user_id = entity.key.id_or_name
-    return User(user_id, entity['pass_hash'], entity['email'], entity['first_name'], entity['last_name'])
+    return User(user_id, entity['password'], entity['email'], entity['first_name'], entity['last_name'])
 
 def load_entity(client, item_id):
     """Load a datstore entity using a particular client, and the ID."""
@@ -49,7 +49,6 @@ def get_list_items(kind):
     # this is good for decoupling the rest of our app from datastore.
     result = list()
     for item in items:
-        print(item)
         result.append(convert_to_object(item))
     
     log('list retrieved. %s items' % len(result))
@@ -74,6 +73,20 @@ def get_passhash(username):
     if len(list(query.fetch())) == 0:
         return ""
     return list(query.fetch())[0]['password']
+
+def get_own_data(username):
+    client = get_client()
+    query = client.query(kind='User')
+    query.add_filter('email', '=', username)
+    user = list(query.fetch())  
+
+    # the code below converts the datastore entities to plain old objects -
+    # this is good for decoupling the rest of our app from datastore.
+    result = list()
+    result.append(convert_to_object(user[0]))
+    
+    #log('list retrieved. %s items' % len(result))
+    return result
 
 """def edit_list_item(item_id, kind):
     client = get_client()

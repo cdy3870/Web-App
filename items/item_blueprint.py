@@ -2,6 +2,7 @@ from flask import flash, redirect, session, url_for, render_template, Blueprint,
 from functools import wraps
 from items.item import Item
 import items.manage
+import manage_user as user
 import uuid
 import json
 
@@ -35,15 +36,11 @@ def upload():
 
 @item_bp.route('/load-items/<kind>/<history>')
 def load_items(kind, history):
-    print(history)
     # first we load the list items
     #items.manage.log('loading list items.')
     #print("Getting list of {} for {}".format(kind, session['username']))
     item_list = items.manage.get_list_items(kind, session['username'], history)
     json_list = []
-
-    print("item list")
-    print(item_list)
 
     # then we convert it into a normal list of dicts so that we can easily turn
     # it into JSON
@@ -191,3 +188,24 @@ def return_item(itemid, kind):
         json_result['error'] = 'The item was edited.'
 
     return Response(json.dumps(json_result), mimetype='application/json')
+
+@item_bp.route('/load-own-data/', methods=['GET', 'POST'])
+def load_own_data():
+    user_list = user.get_own_data(session['username'])
+    currently_listed_list = items.manage.get_list_items_user('Item', session['username'], False)
+    json_list = []
+    # then we convert it into a normal list of dicts so that we can easily turn
+    # it into JSON
+    for item in user_list:
+        d = item.to_dict()
+        d['id'] = str(item.id)
+        json_list.append(d) 
+
+    for item in currently_listed_list:
+        d = item.to_dict()
+        d['id'] = str(item.id)
+        json_list.append(d)
+
+
+    responseJson = json.dumps(json_list)
+    return Response(responseJson, mimetype='application/json')

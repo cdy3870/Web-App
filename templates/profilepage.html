@@ -7,7 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="static\css\StyleSheet.css">
-    <script src="static/scripts/scripts.js?newversion1999995"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="static/scripts/scripts.js?newversion19999996"></script>
   </head>
   
   <body>
@@ -34,37 +35,32 @@
     	<div class="row">
     		<div class="col-sm-6">
     			<h3>About</h3>
-    			<section>
-    				<table class="table table-dark">
-    					<tr>
-    						<th scope="col">First Name:</th>
-   	 						<td></td>
-    					</tr>
-    					<tr>
-    						<th scope="col">Last Name:</th>
-    						<td></td>
-    					</tr>
-    					<tr>
-    						<th scope="col">Email:</th>
-    						<td></td>
-    					</tr>
-    				</table>
-  	  			</section>
+                <p id="first_name"></p>
+                <p id="last_name"></p>
+                <p id="email"></p>
+                <p id="rating"><b>Rating:</b></p>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
     		</div>
     		<div class="col-sm-6">
     			<h3>Currently Listed Items</h3>
   				<section>
-    				<table class="table table-dark">
-    					<thead>
-    						<tr>
-    							<th scope="col">Item Name</th>
-    							<th scope="col">Item Price</th>
-    						</tr>
-    					</thead>
-    					<tbody id="ListedTable"></tbody>
-    				</table>
+                    <table class="table table-dark">
+                    <thead>
+                        <tr>
+                            <th scope="col">Item</th>
+                            <th scope="col">Daily Price</th>
+                            <th scope="col">Weekly Price</th>
+                            <th scope="col">Monthly Price</th>
+                        </tr>
+                        </thead>
+                        <tbody id = "UserItemTable"></tbody>
+                    </table>
     			</section>
-    			<h3>Currently Rented Items</h3>
+    			<!--<h3>Currently Rented Items</h3>
     			<section>
     				<table class="table table-dark">
             			<thead>
@@ -77,8 +73,10 @@
             			</thead>
             			<tbody id="RentedTable"></tbody>
           			</table>
-    			</section>
+    			</section>-->
   			</div>
   		</div>
   	</div>
+
+      <script>loadOwnData()</script>
   </body>

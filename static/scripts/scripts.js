@@ -80,6 +80,8 @@ function queryItems(){
     getData('/query-items/' + category + '/' + location + '/' + daily_price2, displayList)
 }
 
+
+
 //Creating XmlHTTP
 function createXmlHttp() {
     var xmlhttp;
@@ -116,6 +118,7 @@ function getAJAX(url, callback) {
             if (callback) {
                 var obj = null;
                 try {
+                    console.log("arrived 1.75");
                     obj = JSON.parse(xmlHttp.responseText);
                     callback(obj, url);
                 } catch (e) {
@@ -420,5 +423,39 @@ function addRentedItem(result, price){
 function loadUserData(username){
     let prof_username = document.getElementById("prof_username");
     prof_username.innerHTML = username;
+}
+
+function loadOwnData(){
+    getData('/load-own-data/', displayUserData);
+}
+
+function displayUserData(result, targetUrl) {
+    var first_name = "First Name:";
+    var last_name = "Last Name:";
+    var email = "Email:";
+    console.log(result);
+        if (result && result.length) {
+            document.getElementById("first_name").innerHTML = first_name.bold() + " " + result[0].first_name;
+            document.getElementById("last_name").innerHTML = last_name.bold() + " " + result[0].last_name;
+            document.getElementById("email").innerHTML = email.bold() + " " + result[0].email;
+
+            document.getElementById("UserItemTable").innerHTML = '';
+                let table = document.getElementById("UserItemTable");
+                for (var i = 1; i < result.length; i++) {
+                    let row = table.insertRow();           
+                    let cell = row.insertCell();
+                    let text = document.createTextNode(result[i].title)
+                    cell.appendChild(text);
+                    cell = row.insertCell();
+                    text = document.createTextNode("$" + result[i].daily_price)
+                    cell.appendChild(text);
+                    cell = row.insertCell();
+                    text = document.createTextNode("$" + result[i].weekly_price)
+                    cell.appendChild(text);
+                    cell = row.insertCell();
+                    text = document.createTextNode("$" + result[i].monthly_price)
+                    cell.appendChild(text);
+                }
+        }
 }
 

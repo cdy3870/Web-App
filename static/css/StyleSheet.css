@@ -88,3 +88,7 @@
 .scroll-y {
   overflow-y: scroll;
 }
+
+.checked {
+  color: orange;
+}
