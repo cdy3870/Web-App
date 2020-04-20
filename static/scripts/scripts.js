@@ -1,3 +1,45 @@
+// check is the upload form filled
+function submitUploadForm() {
+    let form = document.forms["uploadItem"];
+    if (form["title"].value = "") {
+        alert("Please input item name");
+        return false;
+    } else if (form["daily_price"].value = "") {
+        alert("Please input daily price");
+        return false;
+    } else if (form["daily_price"].value <= 0) {
+        alert("Please input valid daily price");
+        return false;
+    } else if (form["weekly_price"].value = "") {
+        alert("Please input weekly price");
+        return false;
+    } else if (form["weekly_price"].value <= 0) {
+        alert("Please input valid weekly price");
+        return false;
+    } else if (form["monthly_price"].value = "") {
+        alert("Please input monthly price");
+        return false;
+    } else if (form["monthly_price"].value <= 0) {
+        alert("Please input valid monthly price");
+        return false;
+    } else if (form["description"].value = "") {
+        alert("Please input description");
+        return false;
+    } else if (form["retail_price"].value = "") {
+        alert("Please input retail price");
+        return false;
+    } else if (form["retail_price"].value <= 0) {
+        alert("Please input valid retail price");
+        return false;
+    } else if (form["file"].files.length == 0) {
+        alert("Please upload a photo for the item");
+        return false;
+    }
+
+    saveItem('Item');
+    return true;
+}
+
 //Saving Items
 function saveItem(kind, result=undefined, price=undefined) {
     let params = {};
