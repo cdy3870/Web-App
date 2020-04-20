@@ -92,7 +92,8 @@ function saveItem(kind, result=undefined, price=undefined) {
 
 //Loading Items
 function loadItems(kind, history=false) { 
-    getData('/load-items/' + kind + '/' + history, displayList);
+    let url = '/load-items/' + kind + '/' + history;
+    getData(url, displayList.bind(this, url));
 }
 
 //Deleting Items
@@ -121,8 +122,9 @@ function queryItems(){
     this.event.preventDefault();
     let daily_price2 = document.getElementById("dailyprice2").value;
     let category = document.getElementById("category2").value;
-    let location = document.getElementById("location2").value;  
-    getData('/query-items/' + category + '/' + location + '/' + daily_price2, displayList)
+    let location = document.getElementById("location2").value;
+    let url = '/query-items/' + category + '/' + location + '/' + daily_price2;
+    getData(url, displayList.bind(this, url));
 }
 
 
@@ -215,7 +217,7 @@ function objectToParameters(obj) {
 }
 
 //Loading Items Helper Methods
-function displayList(result, targetUrl) {
+function displayList(targetUrl, result) {
     console.log(result);
     console.log(result.length)
         if (result && result.length) {
