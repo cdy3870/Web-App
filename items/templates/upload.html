@@ -38,7 +38,7 @@
       <h1>Upload Items</h1>
       <br>
       
-      <form action="#" method="post" onsubmit="submitUploadForm()" id="form" name="uploadItem" enctype="multipart/form-data">
+      <form method="post" onsubmit="submitUploadForm()" id="form" name="uploadItem" enctype="multipart/form-data">
         <label for="fname"><b>Item Name</b>:</label>
         <input type="text" id="title" name="title" value="{{
           request.form.title }}"><br><br>
@@ -75,8 +75,8 @@
         <label for="fname">Upload Photo:</label>
         <input class="inline" id="the-file" type="file" name="file">
         <br><br>
-        <input class="btn btn-default" type="submit" value="Upload">
       </form>
+      <button class="btn btn-default" onclick="submitUploadForm()">Upload</button>
         
 
 

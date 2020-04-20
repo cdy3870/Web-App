@@ -1,37 +1,38 @@
 // check is the upload form filled
 function submitUploadForm() {
     let form = document.forms["uploadItem"];
-    if (form["title"].value = "") {
+    let formElements = form.elements;
+    if (formElements["title"].value = "") {
         alert("Please input item name");
         return false;
-    } else if (form["daily_price"].value = "") {
+    } else if (formElements["daily_price"].value = "") {
         alert("Please input daily price");
         return false;
-    } else if (form["daily_price"].value <= 0) {
+    } else if (formElements["daily_price"].value <= 0) {
         alert("Please input valid daily price");
         return false;
-    } else if (form["weekly_price"].value = "") {
+    } else if (formElements["weekly_price"].value = "") {
         alert("Please input weekly price");
         return false;
-    } else if (form["weekly_price"].value <= 0) {
+    } else if (formElements["weekly_price"].value <= 0) {
         alert("Please input valid weekly price");
         return false;
-    } else if (form["monthly_price"].value = "") {
+    } else if (formElements["monthly_price"].value = "") {
         alert("Please input monthly price");
         return false;
-    } else if (form["monthly_price"].value <= 0) {
+    } else if (formElements["monthly_price"].value <= 0) {
         alert("Please input valid monthly price");
         return false;
-    } else if (form["description"].value = "") {
+    } else if (formElements["description"].value = "") {
         alert("Please input description");
         return false;
-    } else if (form["retail_price"].value = "") {
+    } else if (formElements["retail_price"].value = "") {
         alert("Please input retail price");
         return false;
-    } else if (form["retail_price"].value <= 0) {
+    } else if (formElements["retail_price"].value <= 0) {
         alert("Please input valid retail price");
         return false;
-    } else if (form["file"].files.length == 0) {
+    } else if (formElements["file"].files.length == 0) {
         alert("Please upload a photo for the item");
         return false;
     }
@@ -371,6 +372,7 @@ function itemSaved(result) {
     }
     console.log("Item uploaded.");
     alert("Upload success.");
+    location.reload();
 }
 
 function rentedItemSaved(result) {
