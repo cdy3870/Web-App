@@ -75,7 +75,7 @@ function saveItem(kind, result=undefined, price=undefined) {
         //var oReq = new XMLHttpRequest();
         //oReq.open("POST", '/save-item/' + kind, true);
         //oReq.send(formData);
-        postAJAX('/save-item/' + kind, itemSaved, formData);
+        postAJAX('/save-item/' + kind, itemSaved, formData, false);
     } 
     else {
         console.log("rented item saved");
@@ -181,10 +181,10 @@ function getAJAX(url, callback) {
 }
 
 // AJAX post request
-function postAJAX(url, callback, data) {
+function postAJAX(url, callback, data, formHeader = true) {
     var xmlHttp = createXmlHttp();
     xmlHttp.open("POST", url, true); // async
-    xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    if (formHeader) xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlHttp.onreadystatechange = function () {
         if (xmlHttp.readyState == 4) {
             if (xmlHttp.status == 200) {
