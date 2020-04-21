@@ -44,16 +44,16 @@ def get_list_items(kind, username, history):
     client = get_client()
     # we build a query
     query = client.query(kind=kind)
+    filtered_items = []
     if kind == 'Item':
         query.add_filter('rented', '=', False)
-        #query.add_filter('renter', '>', username)
-        #query.add_filter('renter', '<', username)
-        #print("loading list")
-        items = list(query.fetch())
-        if len(items) > 1:
-            for item in items:
-                if item["renter"] == username:
-                    items = items.remove(item)
+        items = list(query.fetch()) 
+        print(items) 
+        if items is not None:
+            filtered_items = [item for item in items if item["renter"] != username]
+        else:
+            filtered_items = items
+
     if kind == 'RentedItem':
         query.add_filter('rentee', '=', username)
         if history == 'true':
@@ -62,22 +62,14 @@ def get_list_items(kind, username, history):
         else:
             #print("loading rented items")
             query.add_filter('past_rented', '=', False)
-
-        items = list(query.fetch())
-
-    #else:
-        #query.add_filter('rentee', '>', username)
-        #query.add_filter('rentee', '<', username)
-    # we execute the query
-    print("item print")
-    print(items)
-   
-
+        filtered_items = list(query.fetch())
+    
     # the code below converts the datastore entities to plain old objects -
     # this is good for decoupling the rest of our app from datastore.
     result = list()
-    for item in items:
-        result.append(convert_to_object(item))
+    if filtered_items is not None:
+        for item in filtered_items:
+            result.append(convert_to_object(item))
     
     #log('list retrieved. %s items' % len(result))
     return result
@@ -89,6 +81,7 @@ def get_list_items_user(kind, username, history):
     query = client.query(kind=kind)
 
     query.add_filter("renter", '=', username)
+    query.add_filter("rented", '=', False)
     # we execute the query
     items = list(query.fetch())
 
@@ -135,7 +128,6 @@ def get_list_items_query(kind, location, category, daily_price_range):
                 
             
         #print("loading list")
-    print("querying items")
 
     items = list(query.fetch())
 
@@ -171,7 +163,6 @@ def create_list_item(item, kind):
     entity['category'] = item.category
     entity['location'] = item.location
     entity['blob_url'] = item.blob_url
-    print('putting entity')
     client.put(entity)
     log('saved new entity for ID: %s' % key.id_or_name)
 
@@ -210,12 +201,10 @@ def return_list_item(item_id, kind):
     client = get_client()
     key = load_key(client, kind, item_id)
     entity = load_entity_kind(client, item_id, kind)
-    print(entity)
     for prop in entity:
         entity[prop] = entity[prop]
     entity['rented'] = False
     entity['past_rented'] = True
-    print(entity)
     client.put(entity)
     log('key deleted for ID: %s' % item_id)
 

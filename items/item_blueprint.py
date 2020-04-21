@@ -39,6 +39,7 @@ def load_items(kind, history):
     # first we load the list items
     #items.manage.log('loading list items.')
     #print("Getting list of {} for {}".format(kind, session['username']))
+
     item_list = items.manage.get_list_items(kind, session['username'], history)
     json_list = []
 
@@ -51,14 +52,12 @@ def load_items(kind, history):
 
     responseJson = json.dumps(json_list)
     
-    print("respnse")
-    print(responseJson)
-
     return Response(responseJson, mimetype='application/json')
 
 @item_bp.route('/query-items/<category>/<location>/<daily_price_range>', methods=['GET', 'POST'])
 def query_items(category, location, daily_price_range):
     item_list = items.manage.get_list_items_query('Item', location, category, daily_price_range)
+    print(item_list)
     json_list = []
     # then we convert it into a normal list of dicts so that we can easily turn
     # it into JSON

@@ -94,12 +94,12 @@ def login():
 @login_required
 @app.route('/profilepage')
 def profilepage():
-	return render_template('profilepage.html')
+	return render_template('profilepage.html', username=session['username'], logout=True)
 
 @login_required
 @app.route('/logout')
 def logout():
-    session['username'] = 'git ad'
+    session['username'] = ''
     session.pop('logged_in', None)
     flash('you were just logged out')
 	
