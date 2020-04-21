@@ -33,6 +33,11 @@ def rent():
 def upload():
     return render_template('upload.html', username=session['username'], logout=True)
 
+@item_bp.route('/pay', methods=['GET', 'POST'])
+@login_required
+def pay():
+    return render_template('pay.html', username=session['username'], logout=True)
+
 
 @item_bp.route('/load-items/<kind>/<history>')
 def load_items(kind, history):
