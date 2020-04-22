@@ -184,7 +184,7 @@ function getAJAX(url, callback) {
 function postAJAX(url, callback, data) {
     var xmlHttp = createXmlHttp();
     xmlHttp.open("POST", url, true); // async
-    xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    // xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xmlHttp.onreadystatechange = function () {
         if (xmlHttp.readyState == 4) {
             if (xmlHttp.status == 200) {
