@@ -85,8 +85,13 @@ function saveItem(kind, result=undefined, price=undefined) {
 
 //Loading Items
 function loadItems(kind, history=false) { 
-    let url = '/load-items/' + kind + '/' + history;
-    getAJAX(url, displayList.bind(this, url));
+    if (kind == "item") {
+        let url = '/query-items/' + 'all' + '/' + 'all' + '/' + 'any';
+        getAJAX(url, displayList.bind(this, url));
+    } else {
+        let url = '/load-items/' + kind + '/' + history;
+        getAJAX(url, displayList.bind(this, url));
+    }
 }
 
 //Deleting Items
