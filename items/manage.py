@@ -112,19 +112,19 @@ def get_list_items_query(kind, location, category, daily_price_range):
             query.add_filter('category', '=', category)
         
         
-        if daily_price_range != 'any':
-            print(daily_price_range)
-            if daily_price_range == '$0-$10':
-                query.add_filter('daily_price', '>', 0)
-                query.add_filter('daily_price', '<=', 10) 
-            elif daily_price_range == '$10-50':
-                query.add_filter('daily_price', '>', 10)
-                query.add_filter('daily_price', '<=', 50) 
-            elif daily_price_range == '$50-$200':
-                query.add_filter('daily_price', '>', 50)
-                query.add_filter('daily_price', '<=', 200) 
-            else:
-                query.add_filter('daily_price', '>', 200)
+        #if daily_price_range != 'any':
+        #    print(daily_price_range)
+        #    if daily_price_range == '$0-$10':
+        #        query.add_filter('daily_price', '>', 0)
+        #        query.add_filter('daily_price', '<=', 10) 
+        #    elif daily_price_range == '$10-50':
+        #        query.add_filter('daily_price', '>', 10)
+        #        query.add_filter('daily_price', '<=', 50) 
+        #    elif daily_price_range == '$50-$200':
+        #        query.add_filter('daily_price', '>', 50)
+        #        query.add_filter('daily_price', '<=', 200) 
+        #    else:
+        #        query.add_filter('daily_price', '>', 200)
                 
             
         #print("loading list")
