@@ -47,18 +47,12 @@ function saveItem(kind, result=undefined, price=undefined) {
     console.log(kind);
     if (kind == 'Item') {
         console.log("item saved");
-        /*params['location'] = document.getElementById("location").value;
-        params['category'] = document.getElementById("category").value;
-        params['retail_price'] = document.getElementById("retail_price").value;
-        params['description'] = document.getElementById("description").value;
-        params['monthly_price'] = document.getElementById("monthly_price").value;
-        params['daily_price'] = document.getElementById("daily_price").value;
-        params['weekly_price'] = document.getElementById("weekly_price").value;
-        params['title'] = document.getElementById("title").value;*/
+
         var form = document.getElementById('form');
         var fileInput = document.getElementById('the-file');
         var file = fileInput.files[0];
         console.log(file)
+
         var formData = new FormData(form);
         formData.append('file', file);
         formData.append('test', 'test');
@@ -71,21 +65,20 @@ function saveItem(kind, result=undefined, price=undefined) {
         formData.append('weekly_price', document.getElementById("weekly_price").value);
         formData.append('title', document.getElementById("title").value);
 
-        //sendJsonRequest(formData, '/save-item/' + kind, itemSaved);
-        //var oReq = new XMLHttpRequest();
-        //oReq.open("POST", '/save-item/' + kind, true);
-        //oReq.send(formData);
         postAJAX('/save-item/' + kind, itemSaved, formData);
     } 
     else {
         console.log("rented item saved");
-        params['retail_price'] = result.retail_price;
-        params['description'] = result.description;
-        params['monthly_price'] = price;   
-        params['title'] = result.title;
-        params['rentee'] = result.rentee
-        params['past_rented'] = result.past_rented
-        sendJsonRequest(params, '/save-item/' + kind, rentedItemSaved);
+
+        var formData = new FormData();
+        formData.append('retail_price', result.retail_price);
+        formData.append('description', result.description);
+        formData.append('monthly_price', price);   
+        formData.append('title', result.title);
+        formData.append('rentee', result.rentee);
+        formData.append('past_rented', result.past_rented);
+
+        postAJAX('/save-item/' + kind, rentedItemSaved, formData);
     }
     
 }
@@ -93,29 +86,33 @@ function saveItem(kind, result=undefined, price=undefined) {
 //Loading Items
 function loadItems(kind, history=false) { 
     let url = '/load-items/' + kind + '/' + history;
-    getData(url, displayList.bind(this, url));
+    getAJAX(url, displayList.bind(this, url));
 }
 
 //Deleting Items
 function deleteItem(id, kind) {
-    let params = {"id": id};
-    sendJsonRequest(params, '/delete-item/' + kind, itemDeleted);
+    var formData = new FormData();
+    formData.append("id", id);
+    postAJAX('/delete-item/' + kind, itemDeleted, formData);
 }
 
 //Setting Rent to Items
 function changeItem(id, kind) {
-    let params = {"id": id};
-    sendJsonRequest(params, '/change-item/' + kind, itemEdited);
+    var formData = new FormData();
+    formData.append("id", id);
+    postAJAX('/change-item/' + kind, itemEdited, formData);
 }
 
 function showDetails(id, kind){
-    getData('/get-item/' + id + '/Item', itemLoaded);
+    getAJAX('/get-item/' + id + '/Item', itemLoaded);
 }
 
 function returnItem(id){
-    let params = {"id": id};
-    console.log("returning item")
-    sendJsonRequest(params, '/return-item/' + id + '/RentedItem', itemReturned);
+    console.log("returning item");
+
+    var formData = new FormData();
+    formData.append("id", id);
+    postAJAX('/return-item/' + id + '/RentedItem', itemReturned, formData);
 }
 
 function queryItems(){
@@ -124,7 +121,7 @@ function queryItems(){
     let category = document.getElementById("category2").value;
     let location = document.getElementById("location2").value;
     let url = '/query-items/' + category + '/' + location + '/' + daily_price2;
-    getData(url, displayList.bind(this, url));
+    getAJAX(url, displayList.bind(this, url));
 }
 
 
@@ -141,18 +138,6 @@ function createXmlHttp() {
         alert("Your browser does not support AJAX!");
     }
     return xmlhttp;
-}
-
-//Getting JSON Responses
-function getData(targetUrl, callbackFunction) {
-    getAJAX(targetUrl, callbackFunction);
-}
-
-//Sending JSON Requests
-function sendJsonRequest(parameterObject, targetUrl, callbackFunction) {
-    console.log(targetUrl);
-    console.log(parameterObject);
-    postAJAX(targetUrl, callbackFunction, objectToParameters(parameterObject));
 }
 
 // AJAX get request
@@ -204,16 +189,6 @@ function postAJAX(url, callback, data) {
         }
     }
     xmlHttp.send(data);
-}
-
-
-function objectToParameters(obj) {
-    var text = '';
-    for (var i in obj) {
-        // encodeURIComponent is a built-in function that escapes to URL-safe values
-        text += encodeURIComponent(i) + '=' + encodeURIComponent(obj[i]) + '&';
-    }
-    return text;
 }
 
 //Loading Items Helper Methods
@@ -380,14 +355,12 @@ function itemSaved(result) {
 }
 
 function rentedItemSaved(result) {
-    if (result && result.ok) {
-        console.log("Saved item.");
-        //clearItemForm(result.kind);
-        loadItems('RentedItem');
-    } else {
-        console.log("Received error: " + result.error);
-        //showError(result.error);
+    if (result.error) {
+        console.log("rentedItemSaved() Received error: " + result.error);
+        return;
     }
+    console.log("Saved item.");
+    loadItems('RentedItem');
 }
 
 function itemDeleted(result) {
@@ -456,7 +429,7 @@ function loadUserData(username){
 }
 
 function loadOwnData(){
-    getData('/load-own-data/', displayUserData);
+    getAJAX('/load-own-data/', displayUserData);
 }
 
 function displayUserData(result, targetUrl) {
