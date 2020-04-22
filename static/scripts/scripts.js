@@ -201,6 +201,29 @@ function displayList(targetUrl, result) {
                 document.getElementById("ItemTable").innerHTML = '';
                 let table = document.getElementById("ItemTable");
                 for (var i = 0; i < result.length; i++) {
+                    let tokens = targetUrl.split("/");
+                    let priceFilter = tokens.pop();
+                    switch(priceFilter) {
+                        case "any":
+                        break;
+
+                        case "$0-$10":
+                            if (result[i].retail_price > 10) continue;
+                        break;
+
+                        case "$10-$50":
+                            if (result[i].retail_price < 10 || result[i].retail_price > 50) continue;
+                        break;
+
+                        case "$50-$200":
+                            if (result[i].retail_price < 50 || result[i].retail_price > 200) continue;
+                        break;
+
+                        case ">$200":
+                            if (result[i].retail_price < 200) continue;
+                        break;
+                    }
+
                     let row = table.insertRow();           
                     let cell = row.insertCell();
                     let text = document.createElement('a');
@@ -284,7 +307,7 @@ function displayList(targetUrl, result) {
 
                         button.addEventListener ("click", function() {
                             console.log(String(result[this.id].id))
-                            returnItem(String(result[this.id].id));
+                            showDetails(String(result[this.id].id));
                         });
                         cell = row.insertCell();
                         cell.appendChild(button);
