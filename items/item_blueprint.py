@@ -61,7 +61,7 @@ def load_items(kind, history):
 
 @item_bp.route('/query-items/<category>/<location>/<daily_price_range>', methods=['GET', 'POST'])
 def query_items(category, location, daily_price_range):
-    item_list = items.manage.get_list_items_query('Item', location, category, daily_price_range)
+    item_list = items.manage.get_list_items_query('Item', session['username'], location, category, daily_price_range)
     print(item_list)
     json_list = []
     # then we convert it into a normal list of dicts so that we can easily turn
@@ -194,10 +194,18 @@ def return_item(itemid, kind):
 
     return Response(json.dumps(json_result), mimetype='application/json')
 
-@item_bp.route('/load-own-data/', methods=['GET', 'POST'])
-def load_own_data():
-    user_list = user.get_own_data(session['username'])
-    currently_listed_list = items.manage.get_list_items_user('Item', session['username'], False)
+@item_bp.route('/load-own-data/<username>', methods=['GET', 'POST'])
+def load_own_data(username):
+    user_name = None
+    if username == 'own':
+        user_name = session['username']
+    else:
+        user_name = username
+    print(user_name)
+
+    user_list = user.get_own_data(user_name)
+    currently_listed_list = items.manage.get_list_items_user('Item', user_name, False)
+
     json_list = []
     # then we convert it into a normal list of dicts so that we can easily turn
     # it into JSON

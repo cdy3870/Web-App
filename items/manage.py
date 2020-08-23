@@ -96,7 +96,7 @@ def get_list_items_user(kind, username, history):
     #log('list retrieved. %s items' % len(result))
     return result
 
-def get_list_items_query(kind, location, category, daily_price_range):
+def get_list_items_query(kind, username, location, category, daily_price_range):
     """Retrieve the list items we've already stored."""
     client = get_client()
     query = client.query(kind=kind)
@@ -110,30 +110,13 @@ def get_list_items_query(kind, location, category, daily_price_range):
             query.add_filter('location', '=', location)
         elif location == 'all' and category != 'all':
             query.add_filter('category', '=', category)
-        
-        
-        #if daily_price_range != 'any':
-        #    print(daily_price_range)
-        #    if daily_price_range == '$0-$10':
-        #        query.add_filter('daily_price', '>', 0)
-        #        query.add_filter('daily_price', '<=', 10) 
-        #    elif daily_price_range == '$10-50':
-        #        query.add_filter('daily_price', '>', 10)
-        #        query.add_filter('daily_price', '<=', 50) 
-        #    elif daily_price_range == '$50-$200':
-        #        query.add_filter('daily_price', '>', 50)
-        #        query.add_filter('daily_price', '<=', 200) 
-        #    else:
-        #        query.add_filter('daily_price', '>', 200)
-                
-            
-        #print("loading list")
 
     items = list(query.fetch())
 
     result = list()
     for item in items:
-        result.append(convert_to_object(item))
+        if item['renter'] != username:
+            result.append(convert_to_object(item))
     return result
 
 def get_list_item(item_id, kind):

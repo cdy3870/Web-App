@@ -97,6 +97,11 @@ def profilepage():
 	return render_template('profilepage.html', username=session['username'], logout=True)
 
 @login_required
+@app.route('/renteeprofilepage')
+def renteeprofilepage():
+	return render_template('renteeprofilepage.html', username=session['username'], logout=True)
+
+@login_required
 @app.route('/logout')
 def logout():
     session['username'] = ''

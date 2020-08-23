@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="static\css\StyleSheet.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="static/scripts/scripts.js?newversion19999999"></script>
+    <script src="static/scripts/scripts.js?newversion19999997"></script>
   </head>
   
   <body>
@@ -23,7 +23,7 @@
       </div>
       <div class="float-right">
         <!-- stuff on the right -->
-        <a href="/profilepage" class="active" id="user">{{username}}</a>
+        <a href="/renteeprofilepage" id="user">{{username}}</a>
         {%- if logout -%}
         <a href="/logout">Log Out</a>
         {%- endif %}
@@ -80,5 +80,5 @@
   		</div>
   	</div>
 
-      <script>loadOwnData()</script>
+      <script>loadRenteeData()</script>
   </body>

@@ -233,11 +233,10 @@ function displayList(targetUrl, result) {
                     let cell = row.insertCell();
                     let text = document.createElement('a');
                     text.addEventListener ("click", function() {
-                        console.log("test");
-                        loadUserData("test");
+                        loadRenteeData(result[i].renter);
                     });
-                    text.href = "/profilepage"
-                    let linkText = document.createTextNode(result[i].renter);
+                    text.href = "/renteeprofilepage"
+                    let linkText = document.createTextNode(result[i].renter);                    
                     text.appendChild(linkText);
                     cell.appendChild(text);
                     cell = row.insertCell();
@@ -457,7 +456,11 @@ function loadUserData(username){
 }
 
 function loadOwnData(){
-    getAJAX('/load-own-data/', displayUserData);
+    getAJAX('/load-own-data/own', displayUserData);
+}
+
+function loadRenteeData(username){
+    getAJAX('/load-own-data/username', displayUserData);
 }
 
 function displayUserData(result, targetUrl) {
