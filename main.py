@@ -10,9 +10,7 @@ app = Flask(__name__, static_url_path='/static')
 app.register_blueprint(item_bp)
 app.secret_key = 'secret'
 
-
-
-#wrap used to prevent unwanted accesses
+# Wrap used to prevent unwanted accesses
 def login_required(f):
 	@wraps(f)
 	def wrap(*args, **kwargs):
@@ -23,10 +21,12 @@ def login_required(f):
 			return redirect(url_for('login'))
 	return wrap
 
+# Render template for the home page
 @app.route('/')
 def homepage():
 	return render_template('homepage.html')
 
+# Render template for the sign up page
 @app.route('/signup', methods = ['GET', 'POST'])
 def signup():
     error = None
@@ -37,6 +37,7 @@ def signup():
     last_name = None
     user_id = 0
 
+    # Get POST request form data for sign up information
     if request.method == 'POST':   
         if 'psw' in request.form:
 	        pass_hash = sha256_crypt.encrypt(request.form['psw'])
@@ -48,6 +49,7 @@ def signup():
 	        last_name = request.form['last_name']
         json_result = {}
 
+        # Create user item for datastore
         try:
             if user_id:
                 user = User(user_id, pass_hash, email, first_name, last_name) 
@@ -65,11 +67,14 @@ def signup():
 
     return render_template('CreateProfile.html')
 
+# Render template for login page 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
     error = None
     username = None
+
     if request.method == 'POST':
+        # Admin login for now
         pass_hash_compare = manage_user.get_passhash(request.form['username'])
         if request.form['username'] != 'admin' or request.form['password'] != 'admin':
             error = 'invalid credentials'
@@ -79,6 +84,8 @@ def login():
             flash('you were just logged in')
             session['username'] = request.form['username']
             return redirect(url_for('item_blueprint.rent', username=session['username']))
+
+        # Check if password hash is correct given username key
         if pass_hash_compare != "":
             if not sha256_crypt.verify(request.form['password'], pass_hash_compare):
                 error = 'invalid credentials'
@@ -91,16 +98,19 @@ def login():
 			
     return render_template('login.html', error=error)
 
+# Render template for profile page
 @login_required
 @app.route('/profilepage')
 def profilepage():
 	return render_template('profilepage.html', username=session['username'], logout=True)
 
+# Render template renter pages
 @login_required
 @app.route('/renteeprofilepage')
 def renteeprofilepage():
 	return render_template('renteeprofilepage.html', username=session['username'], logout=True)
 
+# Redirect on logout
 @login_required
 @app.route('/logout')
 def logout():

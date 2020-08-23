@@ -1,16 +1,18 @@
 from google.cloud import datastore
 from user import User
 
+# User item type for datastore
 IT_ENTITY_TYPE = 'User'
 
 def log(msg):
     print('userdata: %s' % msg)
 
+# Set up datastore client
 def get_client():
     return datastore.Client()
 
-def load_key(client, kind, item_id=None):
-    
+# Load key for datastore client
+def load_key(client, kind, item_id=None):  
     if item_id:
         key = client.key(kind, int(item_id))
     else:
@@ -18,24 +20,25 @@ def load_key(client, kind, item_id=None):
     
     return key
 
+# Convert datastore entity into a User object
 def convert_to_object(entity):
     user_id = entity.key.id_or_name
     return User(user_id, entity['password'], entity['email'], entity['first_name'], entity['last_name'])
 
-def load_entity(client, item_id):
-    """Load a datstore entity using a particular client, and the ID."""
+# Load a datastore entity using a particular client, and the ID
+def load_entity(client, item_id):   
     key = load_key(client, IT_ENTITY_TYPE, item_id)
     entity = client.get(key)
     log('retrieved entity for ' + item_id)
     return entity
 
 def load_entity_kind(client, item_id, kind):
-    """Load a datstore entity using a particular client, and the ID."""
     key = load_key(client, kind, item_id)
     entity = client.get(key)
     log('retrieved entity for ' + item_id)
     return entity
 
+# Return a list of items given the kind (User)
 def get_list_items(kind):
     """Retrieve the list items we've already stored."""
     client = get_client()
@@ -54,6 +57,7 @@ def get_list_items(kind):
     log('list retrieved. %s items' % len(result))
     return result
 
+# Create an entity given a User object
 def create_list_item(user):
     client = get_client()
     key = load_key(client, IT_ENTITY_TYPE)
@@ -66,6 +70,7 @@ def create_list_item(user):
     client.put(entity)
     log('saved new entity for ID: %s' % key.id_or_name)
 
+# Return the hash of password given a username
 def get_passhash(username):
     client = get_client()
     query = client.query(kind=IT_ENTITY_TYPE)
@@ -87,38 +92,3 @@ def get_own_data(username):
     
     #log('list retrieved. %s items' % len(result))
     return result
-
-"""def edit_list_item(item_id, kind):
-    client = get_client()
-    key = load_key(client, kind)
-    entity = load_entity(client, item_id)
-
-    for prop in entity:
-        entity[prop] = entity[prop]
-    entity['rented'] = True
-    client.put(entity)
-    #print(client.get(key)['rented'])
-    
-
-def get_list_item(item_id):
-    #Retrieve an object for the ShoppingListItem with the specified ID.
-    client = get_client()
-    log('retrieving object for ID: %s' % item_id)
-    entity = load_entity(client, item_id)
-    return convert_to_object(entity)
-
-def save_list_item(shopping_list_item):
-    #Save an existing list item from an object.
-    client = get_client()
-    entity = load_entity(client, shopping_list_item.id)
-    entity.update(shopping_list_item.to_dict())
-    client.put(entity)
-    log('entity saved for ID: %s' % shopping_list_item.id)
-
-def delete_list_item(item_id, kind):
-    #Delete the entity associated with the specified ID.
-    client = get_client()
-    key = load_key(client, kind, item_id)
-    log('key loaded for ID: %s' % item_id)
-    client.delete(key)
-    log('key deleted for ID: %s' % item_id)"""
