@@ -115,6 +115,7 @@ def get_list_items_query(kind, username, location, category, daily_price_range):
 
     result = list()
     for item in items:
+        if item['daily_price_range']
         if item['renter'] != username:
             result.append(convert_to_object(item))
     return result

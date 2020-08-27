@@ -42,8 +42,7 @@ def pay():
 @item_bp.route('/load-items/<kind>/<history>')
 def load_items(kind, history):
     # first we load the list items
-    #items.manage.log('loading list items.')
-    #print("Getting list of {} for {}".format(kind, session['username']))
+    items.manage.log('loading list items.')
 
     item_list = items.manage.get_list_items(kind, session['username'], history)
     json_list = []

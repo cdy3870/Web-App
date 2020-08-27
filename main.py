@@ -35,7 +35,6 @@ def signup():
     email = None
     first_name = None
     last_name = None
-    user_id = 0
 
     # Get POST request form data for sign up information
     if request.method == 'POST':   
@@ -51,15 +50,10 @@ def signup():
 
         # Create user item for datastore
         try:
-            if user_id:
-                user = User(user_id, pass_hash, email, first_name, last_name) 
-                manage_user.log('saving user for ID: %s' % user_id)
-                manage_user.save_list_item(user)
-            else:
-                manage_user.log('saving new user')
-                manage_user.create_list_item(User(None, pass_hash, email, first_name, last_name))
-                return redirect(url_for('homepage'))
+            manage_user.log('saving new user')
+            manage_user.create_list_item(User(None, pass_hash, email, first_name, last_name))
             json_result['ok'] = True
+            return redirect(url_for('homepage'))         
         except Exception as exc:
             manage_user.log(str(exc))
             json_result['error'] = 'The item was not saved.'
@@ -75,7 +69,6 @@ def login():
 
     if request.method == 'POST':
         # Admin login for now
-        pass_hash_compare = manage_user.get_passhash(request.form['username'])
         if request.form['username'] != 'admin' or request.form['password'] != 'admin':
             error = 'invalid credentials'
         else:
@@ -86,6 +79,7 @@ def login():
             return redirect(url_for('item_blueprint.rent', username=session['username']))
 
         # Check if password hash is correct given username key
+        pass_hash_compare = manage_user.get_passhash(request.form['username'])
         if pass_hash_compare != "":
             if not sha256_crypt.verify(request.form['password'], pass_hash_compare):
                 error = 'invalid credentials'
@@ -101,13 +95,13 @@ def login():
 # Render template for profile page
 @login_required
 @app.route('/profilepage')
-def profilepage():
+def profile_page():
 	return render_template('profilepage.html', username=session['username'], logout=True)
 
 # Render template renter pages
 @login_required
 @app.route('/renteeprofilepage')
-def renteeprofilepage():
+def rentee_profile_page():
 	return render_template('renteeprofilepage.html', username=session['username'], logout=True)
 
 # Redirect on logout
