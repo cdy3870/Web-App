@@ -3,11 +3,13 @@ import os
 from functools import wraps
 from passlib.hash import sha256_crypt
 from items.item_blueprint import item_bp
+from payment.payment_blueprint import payment_bp
 from user import User
 import manage_user
 
 app = Flask(__name__, static_url_path='/static')
 app.register_blueprint(item_bp)
+app.register_blueprint(payment_bp)
 app.secret_key = 'secret'
 
 

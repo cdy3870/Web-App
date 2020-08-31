@@ -129,6 +129,27 @@ function queryItems(){
     getAJAX(url, displayList.bind(this, url));
 }
 
+//Rent Items
+function rentItem(id){
+    fetch("/config")
+    .then((result) => { return result.json(); })
+    .then((data) => {
+        // Initialize Stripe.js
+        const stripe = Stripe(data.publicKey);
+
+        // Get Checkout Session ID
+        fetch("/create-checkout-session")
+        .then((result) => { return result.json(); })
+        .then((data) => {
+        console.log(data);
+        // Redirect to Stripe Checkout
+        return stripe.redirectToCheckout({sessionId: data.sessionId})
+        })
+        .then((res) => {
+        console.log(res);
+        });
+    });
+}
 
 
 //Creating XmlHTTP
@@ -282,12 +303,13 @@ function displayList(targetUrl, result) {
                         cell.appendChild(text);
 
                         var button = document.createElement("button");
-                        button.innerHTML = "Return";
+                        button.innerHTML = "Rent";
                         button.id = i;
 
                         button.addEventListener ("click", function() {
                             console.log(String(result[this.id].id))
-                            returnItem(String(result[this.id].id));
+                            rentItem(String(result[this.id].id));
+                            //returnItem(String(result[this.id].id));
                         });
                         cell = row.insertCell();
                         cell.appendChild(button);
@@ -416,6 +438,16 @@ function itemReturned(result) {
         console.log("Returned item.");
         loadItems('RentedItem');
         loadItems('RentedItem', true);
+    } else {
+        console.log("Received error: " + result.error);
+        //showError(result.error);
+    }
+}
+
+function itemRented(result) {
+    if (result && result.ok) {
+        console.log("Returned item.");
+    
     } else {
         console.log("Received error: " + result.error);
         //showError(result.error);
