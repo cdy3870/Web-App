@@ -6,11 +6,35 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Flask + Stripe Checkout</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+    <link rel="stylesheet" href="static\css\StyleSheet.css">
     <script src="https://js.stripe.com/v3/"></script>  <!-- new -->
     <script src="{{ url_for('static', filename='main.js') }}"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
   </head>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="float-left">
+        <!-- stuff on the left -->
+        <a href="/">Home</a>
+        <a href="/rent">Rent</a>
+        <a href="/upload">Upload</a>
+      </div>
+      <div class="float-right">
+        <!-- stuff on the right -->
+        <a href="/profilepage" id="user">{{username}}</a>
+        {%- if logout -%}
+        <a href="/logout">Log Out</a>
+        {%- endif %}
+        {%- if not logout -%}
+        <a href="/login">Log In</a>
+        <a href="/signup">Sign Up</a>
+        {%- endif %}
+      </div>
+    </nav>
+    <!-- Navbar -->
+
+
   <body>
     <section class="section">
         <div class="container">

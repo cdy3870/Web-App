@@ -131,6 +131,7 @@ function queryItems(){
 
 //Rent Items
 function rentItem(id){
+    console.log(id);
     fetch("/config")
     .then((result) => { return result.json(); })
     .then((data) => {
@@ -138,7 +139,7 @@ function rentItem(id){
         const stripe = Stripe(data.publicKey);
 
         // Get Checkout Session ID
-        fetch("/create-checkout-session")
+        fetch("/create-checkout-session/" + id + "/RentedItem")
         .then((result) => { return result.json(); })
         .then((data) => {
         console.log(data);
@@ -307,7 +308,7 @@ function displayList(targetUrl, result) {
                         button.id = i;
 
                         button.addEventListener ("click", function() {
-                            console.log(String(result[this.id].id))
+                            console.log(String(result[this.id].id));
                             rentItem(String(result[this.id].id));
                             //returnItem(String(result[this.id].id));
                         });

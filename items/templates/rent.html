@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="static/scripts/scripts.js?version1.000038"></script>
+    <script src="static/scripts/scripts.js?version1.000047"></script>
     <script src="https://js.stripe.com/v3/"></script>
     <link rel="stylesheet" href="static\css\StyleSheet.css">
   </head>
@@ -19,7 +19,6 @@
         <a href="/">Home</a>
         <a class="active" href="/rent">Rent</a>
         <a href="/upload">Upload</a>
-        <a href="/pay">Pay</a>
       </div>
       <div class="float-right">
         <!-- stuff on the right -->
@@ -134,7 +133,7 @@
       </div>
 
       <div class="container w100">
-        <h3>Rented Items</h3>
+        <h3>Rent Cart</h3>
         <div class="container w100 vh30 scroll-y">
           <table class="table table-dark">
             <thead>
@@ -142,7 +141,7 @@
                 <th scope="col">Item</th>
                 <th scope="col">Price</th>
                 <th scope="col">Next Billing Date</th>
-                <th scope="col">Return Item</th>
+                <th scope="col">Rent Item</th>
               </tr>
             </thead>
             <tbody id="RentedTable"></tbody>

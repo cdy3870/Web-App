@@ -2,6 +2,7 @@ import os
 import stripe
 
 from flask import Flask, jsonify, render_template, request, Blueprint
+import items.manage
 
 payment_bp = Blueprint('payment_blueprint', __name__, template_folder='templates')
 
@@ -19,12 +20,14 @@ def get_publishable_key():
     return jsonify(stripe_config)
 
 
-@payment_bp.route("/create-checkout-session")
-def create_checkout_session():
+@payment_bp.route("/create-checkout-session/<itemid>/<kind>")
+def create_checkout_session(itemid, kind):
     # For testing purposes
     domain_url = "https://5000-824a9229-0f63-4adf-a13a-b1601aa981de.us-east1.cloudshell.dev/"
     stripe.api_key = stripe_keys["secret_key"]
-
+    item = items.manage.get_list_item(itemid, kind)
+    item = item.to_dict()
+    print(type(int(item['monthly_price'])))
     try:
         # Create new Checkout Session for the order
         # Other optional params include:
@@ -42,10 +45,10 @@ def create_checkout_session():
             mode="payment",
             line_items=[
                 {
-                    "name": "T-shirt",
+                    "name": item['title'],
                     "quantity": 1,
                     "currency": "usd",
-                    "amount": "2000",
+                    "amount": int(item['monthly_price']) * 100
                 }
             ]
         )
