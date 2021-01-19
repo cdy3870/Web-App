@@ -197,8 +197,8 @@ def get_client_storage():
 def create_image_blob(uploaded_file, filename):
     print("creating image blob for: {}".format(filename))
     client = get_client_storage()
-    bucket = client.get_bucket('image_bucket_1520')
+    bucket = client.get_bucket('web-app-267217.appspot.com')
     file_blob = bucket.blob(filename)
     file_blob.upload_from_string(uploaded_file.read(), content_type=uploaded_file.content_type)
-    
+
     return file_blob.public_url
