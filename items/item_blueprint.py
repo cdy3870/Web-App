@@ -111,26 +111,29 @@ def save_item(kind):
 
     json_result = {}
 
-    item_id = 0
+    # item_id = 0
     try:
-        if item_id:
-            item = Item(item_id, title, daily_price, weekly_price,
-                        monthly_price, description, retail_price, kind)
-            items.manage.log('saving list item for ID: %s' % item_id)
-            # manage.save_list_item(item)
+        # if item_id:
+        #     item = Item(item_id, title, daily_price, weekly_price,
+        #                 monthly_price, description, retail_price, kind)
+        #     items.manage.log('saving list item for ID: %s' % item_id)
+        #     # manage.save_list_item(item)
+        # else:
+        items.manage.log('saving new list item')
+        if kind == 'Item':
+            blob_url = items.manage.create_image_blob(uploaded_photo, uploaded_photo.filename)
+            
+            items.manage.create_list_item(Item(
+                None, item_title, daily_price, weekly_price, monthly_price, description, retail_price, kind, renter=session['username'], 
+                category=category, location=location, blob_url=blob_url), kind, None)
+            
         else:
-            items.manage.log('saving new list item')
-            if kind == 'Item':
-                blob_url = items.manage.create_image_blob(uploaded_photo, uploaded_photo.filename)
-                
-                items.manage.create_list_item(Item(
-                    None, item_title, daily_price, weekly_price, monthly_price, description, retail_price, kind, renter=session['username'], 
-                    category=category, location=location, blob_url=blob_url), kind)
-                
-            else:
-                print("Saving rented item for {}".format(session['username']))
-                items.manage.create_list_item(Item(None, item_title, daily_price, weekly_price,
-                                              monthly_price, description, retail_price, kind, False, session['username'], past_rented=False), kind)
+            print("Saving rented item for {}".format(session['username']))
+            item_id = request.form['id']
+            period = request.form['period']
+            print("Period: " + period)
+            items.manage.create_list_item(Item(None, item_title, daily_price, weekly_price,
+                                            monthly_price, description, retail_price, kind, False, session['username'], past_rented=False), kind, period)
     except Exception as exc:
         items.manage.log(str(exc))
         json_result['error'] = 'The item was not saved.'

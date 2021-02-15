@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="static\css\StyleSheet.css">
     <script src="https://js.stripe.com/v3/"></script>  <!-- new -->
     <script src="{{ url_for('static', filename='main.js') }}"></script>
+    <script src="./success.js" defer></script>
     <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
   </head>
 
@@ -37,9 +38,10 @@
 
   <body>
     <section class="section">
-        <div class="container">
-        <p>Your payment succeeded.</p>
-        </div>
+        <form id="manage-billing-form">
+            <p>Your payment succeeded.</p>
+            <button>Manage Billing</button>
+        </form>
     </section>
   </body>
 </html>

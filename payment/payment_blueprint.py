@@ -20,14 +20,14 @@ def get_publishable_key():
     return jsonify(stripe_config)
 
 
-@payment_bp.route("/create-checkout-session/<itemid>/<kind>")
-def create_checkout_session(itemid, kind):
+@payment_bp.route("/create-checkout-session/<itemid>/<kind>/<price>")
+def create_checkout_session(itemid, kind, price):
     # For testing purposes
-    domain_url = "https://5000-824a9229-0f63-4adf-a13a-b1601aa981de.us-east1.cloudshell.dev/"
+    domain_url = "https://5000-cs-617535499474-default.us-east1.cloudshell.dev/"
     stripe.api_key = stripe_keys["secret_key"]
     item = items.manage.get_list_item(itemid, kind)
     item = item.to_dict()
-    print(type(int(item['monthly_price'])))
+    print(type(price))
     try:
         # Create new Checkout Session for the order
         # Other optional params include:
@@ -39,16 +39,16 @@ def create_checkout_session(itemid, kind):
 
         # ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
         checkout_session = stripe.checkout.Session.create(
-            success_url=domain_url + "success?session_id={CHECKOUT_SESSION_ID}",
-            cancel_url=domain_url + "rent",
-            payment_method_types=["card"],
-            mode="payment",
+            success_url = domain_url + "success?session_id={CHECKOUT_SESSION_ID}",
+            cancel_url = domain_url + "rent",
+            payment_method_types = ["card"],
+            mode = "payment",
             line_items=[
                 {
                     "name": item['title'],
                     "quantity": 1,
                     "currency": "usd",
-                    "amount": int(item['monthly_price']) * 100
+                    "amount": int(price) * 100
                 }
             ]
         )
@@ -88,3 +88,20 @@ def webhook():
         # TODO: run some custom code here
 
     return "Success", 200
+
+@payment_bp.route('/customer-portal', methods=['POST'])
+def customer_portal():
+    data = json.loads(request.data)
+    # For demonstration purposes, we're using the Checkout session to retrieve the customer ID.
+    # Typically this is stored alongside the authenticated user in your database.
+    checkout_session_id = data['sessionId']
+    checkout_session = stripe.checkout.Session.retrieve(checkout_session_id)
+
+    # This is the URL to which the customer will be redirected after they are
+    # done managing their billing with the portal.
+    return_url = os.getenv("DOMAIN")
+
+    session = stripe.billing_portal.Session.create(
+        customer=checkout_session.customer,
+        return_url=return_url)
+    return jsonify({'url': session.url})

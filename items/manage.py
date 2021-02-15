@@ -22,7 +22,7 @@ def convert_to_object(entity):
     item_id = entity.key.id_or_name
     
     return Item(item_id, entity['title'], entity['daily_price'], entity['weekly_price'], entity['monthly_price'], entity['description'], 
-                entity['retail_price'], entity['kind'], entity['rented'], entity['rentee'], entity['renter'], entity['past_rented'], entity['category'], entity['location'],
+                entity['retail_price'], entity['kind'], entity['rented'], entity['rentee'], entity['renter'], entity['period'], entity['past_rented'], entity['category'], entity['location'],
                 entity['blob_url'])
 
 def load_entity(client, item_id):
@@ -126,7 +126,7 @@ def get_list_item(item_id, kind):
     entity = load_entity_kind(client, item_id, kind)
     return convert_to_object(entity)
 
-def create_list_item(item, kind):
+def create_list_item(item, kind, period):
     client = get_client()
     key = load_key(client, item.kind)
     item.id = key.id_or_name
@@ -142,10 +142,12 @@ def create_list_item(item, kind):
     entity['rented'] = item.rented
     entity['rentee'] = item.rentee
     entity['renter'] = item.renter
+    entity['period'] = item.period
     entity['past_rented'] = item.past_rented
     entity['category'] = item.category
     entity['location'] = item.location
     entity['blob_url'] = item.blob_url
+    entity['period'] = period
     client.put(entity)
     log('saved new entity for ID: %s' % key.id_or_name)
 
@@ -197,7 +199,7 @@ def get_client_storage():
 def create_image_blob(uploaded_file, filename):
     print("creating image blob for: {}".format(filename))
     client = get_client_storage()
-    bucket = client.get_bucket('image_bucket_1520')
+    bucket = client.get_bucket('web-app-267217.appspot.com')
     file_blob = bucket.blob(filename)
     file_blob.upload_from_string(uploaded_file.read(), content_type=uploaded_file.content_type)
     

@@ -42,9 +42,9 @@ function submitUploadForm() {
 }
 
 //Saving Items
-function saveItem(kind, result=undefined, price=undefined) {
+function saveItem(kind, id=undefined, result=undefined, price=undefined, period=undefined) {
     let params = {};
-    console.log(kind);
+    // console.log(kind);
     if (kind == 'Item') {
         console.log("item saved");
 
@@ -64,20 +64,21 @@ function saveItem(kind, result=undefined, price=undefined) {
         formData.append('daily_price', document.getElementById("daily_price").value);
         formData.append('weekly_price', document.getElementById("weekly_price").value);
         formData.append('title', document.getElementById("title").value);
-
         postAJAX('/save-item/' + kind, itemSaved, formData);
     } 
     else {
         console.log("rented item saved");
-
+        result.period = period;
+        console.log(result.period);
         var formData = new FormData();
         formData.append('retail_price', result.retail_price);
         formData.append('description', result.description);
         formData.append('monthly_price', price);   
         formData.append('title', result.title);
         formData.append('rentee', result.rentee);
+        formData.append('period', period);
         formData.append('past_rented', result.past_rented);
-
+        formData.append("id", id);
         postAJAX('/save-item/' + kind, rentedItemSaved, formData);
     }
     
@@ -130,8 +131,8 @@ function queryItems(){
 }
 
 //Rent Items
-function rentItem(id){
-    console.log(id);
+function rentItem(id, price){
+    console.log(price);
     fetch("/config")
     .then((result) => { return result.json(); })
     .then((data) => {
@@ -139,7 +140,7 @@ function rentItem(id){
         const stripe = Stripe(data.publicKey);
 
         // Get Checkout Session ID
-        fetch("/create-checkout-session/" + id + "/RentedItem")
+        fetch("/create-checkout-session/" + id + "/RentedItem/" + price)
         .then((result) => { return result.json(); })
         .then((data) => {
         console.log(data);
@@ -220,8 +221,6 @@ function postAJAX(url, callback, data) {
 
 //Loading Items Helper Methods
 function displayList(targetUrl, result) {
-    console.log(result);
-    console.log(result.length)
         if (result && result.length) {
             if (result[0].kind == 'Item'){
                 console.log("Items loaded");
@@ -290,8 +289,10 @@ function displayList(targetUrl, result) {
                 if (result[0].past_rented == false){
                     document.getElementById("RentedTable").innerHTML = '';
                     console.log("Rented items loaded");
+                    console.log(result[0])
                     let table = document.getElementById("RentedTable");
                     for (var i = 0; i < result.length; i++) {
+                        // Name, price, period
                         let row = table.insertRow();           
                         let cell = row.insertCell();
                         let text = document.createTextNode(result[i].title)
@@ -300,16 +301,50 @@ function displayList(targetUrl, result) {
                         text = document.createTextNode("$" + result[i].monthly_price)
                         cell.appendChild(text);
                         cell = row.insertCell();
-                        text = document.createTextNode("April 20, 2020")
+                        text = document.createTextNode(result[i].period);
                         cell.appendChild(text);
 
-                        var button = document.createElement("button");
-                        button.innerHTML = "Rent";
-                        button.id = i;
 
+                        // Period dropdown
+                        let uuid = Date.now();
+                        let price_id = "" + uuid + result[i].monthly_price
+                        let mask = 19;
+                        let mask2 = 6;
+                        let periodDropdown = document.createElement("select");
+                        periodDropdown.setAttribute("id", "select" + price_id);
+                        let num = 0;
+                        if(result[i].period == "Daily") num = 7;
+                        else if(result[i].period == "Weekly") num = 4;
+                        else num = 12;
+                        for(let j = 0; j < num; j++){
+                            periodDropdown.appendChild(new Option(j + 1));
+                        }
+                        cell = row.insertCell();
+                        cell.appendChild(periodDropdown); 
+                        // console.log(periodDropdown.getAttribute("id"));
+
+                        document.getElementById("select" + price_id).onchange = function(){
+                            // console.log("total" + this.getAttribute("id").slice(mask2));
+                            document.getElementById("total" + this.getAttribute("id").slice(mask2)).innerHTML = "$" + parseInt(this.getAttribute("id").slice(mask)) * this.value;
+                        }
+
+                        // Total
+                        let total = document.createElement("total");
+                        total.setAttribute("id", "total" + price_id); 
+                        total.innerHTML = "$" + result[i].monthly_price; 
+                        cell = row.insertCell();
+                        cell.appendChild(total);
+                    
+                        // Rent button
+                        let button = document.createElement("button");
+                        let mask3 = 13;
+                        button.innerHTML = "Rent";
+                        button.id = price_id;
+                        button.name = i;
+                        
                         button.addEventListener ("click", function() {
-                            console.log(String(result[this.id].id));
-                            rentItem(String(result[this.id].id));
+                            // console.log(document.getElementById("total" + this.getAttribute("id")).innerHTML);
+                            rentItem(String(result[this.name].id), document.getElementById("total" + this.getAttribute("id")).innerHTML.slice(1));
                             //returnItem(String(result[this.id].id));
                         });
                         cell = row.insertCell();
@@ -333,7 +368,6 @@ function displayList(targetUrl, result) {
                         button.id = i;
 
                         button.addEventListener ("click", function() {
-                            console.log(String(result[this.id].id))
                             showDetails(String(result[this.id].id));
                         });
                         cell = row.insertCell();
@@ -362,10 +396,12 @@ function displayList(targetUrl, result) {
         }
 }  
 
-
+function changeTotal(){
+    var changedTotal = document.getElementById('total');
+}
 
 function itemLoaded(result) {
-    console.log(result);
+    // console.log(result);
     showElement(document.getElementById('buttongroup'));
 
     document.getElementById('details').innerHTML = result.description;
@@ -377,9 +413,9 @@ function itemLoaded(result) {
 
     document.getElementById("image").src = result.blob_url;
 
-    dailyButton.onclick = addRentedItem.bind(dailyButton, result, result.daily_price);
-    weeklyButton.onclick = addRentedItem.bind(dailyButton, result, result.weekly_price);
-    monthlyButton.onclick = addRentedItem.bind(dailyButton, result, result.monthly_price);
+    dailyButton.onclick = addRentedItem.bind(dailyButton, result, result.daily_price, "Daily");
+    weeklyButton.onclick = addRentedItem.bind(dailyButton, result, result.weekly_price, "Weekly");
+    monthlyButton.onclick = addRentedItem.bind(dailyButton, result, result.monthly_price, "Monthly");
 }
 
 
@@ -455,7 +491,7 @@ function itemRented(result) {
     }
 }
 
-function addRentedItem(result, price){
+function addRentedItem(result, price, period){
     /*let table = document.getElementById("RentedTable")
     let row = table.insertRow();
     let text = document.createTextNode(result.title)
@@ -475,7 +511,7 @@ function addRentedItem(result, price){
     cell = row.insertCell();
     cell.appendChild(returnButton);*/
     //deleteItem(String(result.id), result.kind);
-    saveItem('RentedItem', result, price)
+    saveItem('RentedItem', String(result.id), result, price, period)
     changeItem(String(result.id), result.kind)
     hideElement(document.getElementById('buttongroup'));
     document.getElementById('details').innerHTML = "Select on view to look at the description and the retail price of the item.";
